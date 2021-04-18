@@ -56,7 +56,35 @@ public class Loader extends DataBase{
     public List<testsByRegionEntry> LoadTestByRegionOverTime()
     {
         List<testsByRegionEntry> testByRegionsEntries = new ArrayList<testsByRegionEntry>();
-        return testByRegionsEntries;
+
+        try
+        {
+            // Tutorial found at https://www.javatpoint.com/java-string-to-int, but adapted a lot
+            // parsing a CSV file into BufferedReader class constructor
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(folderPath + testsOverTimeFilename));
+            line = bufferedReader.readLine();
+
+            while ((line = bufferedReader.readLine()) != null)
+            {
+                String[] data = line.split(splitBy);
+                testByRegionsEntries.add(new testsByRegionEntry(data[0],
+                                                                Integer.parseInt(data[1]),
+                                                                Integer.parseInt(data[2]),
+                                                                Integer.parseInt(data[3]),
+                                                                Integer.parseInt(data[4]),
+                                                                Integer.parseInt(data[5]),
+                                                                Integer.parseInt(data[6]),
+                                                                Integer.parseInt(data[7]),
+                                                                Integer.parseInt(data[8]),
+                                                                Integer.parseInt(data[9])));
+            }
+            return testByRegionsEntries;
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public List<deathsEntry> LoadDeathsOverTime()
