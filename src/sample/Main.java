@@ -22,8 +22,8 @@ public class Main extends Application {
         launch(args);
 
         DataBase dataBase = new DataBase(" ");
+        var data = dataBase.GetTestOverTimeData();
 
-        var covidData = dataBase.getTestEntry(0);
 
 
     }

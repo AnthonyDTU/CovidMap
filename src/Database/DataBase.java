@@ -2,157 +2,65 @@ package Database;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
-public class DataBase {
+public class DataBase extends DataFromFile{
 
     String folderPath;
 
+    private final String testsOverTimeFilename = "Test_pos_over_time.csv";
+    private final String testsByRegionOverTimeFilename = "Test_regioner.csv";
+    private final String deathsOverTimeFilename = "Deaths_over_time.csv";
+    private final String newlyAdmittedOverTimeFilename = "Newly_admitted_over_time.csv";
+    private final String casesByAgeFilename = "Cases_by_age.csv";
+    private final String casesBySexFilename = "Cases_by_sex.csv";
+
+    private static DataFromFile testsOverTime = new DataFromFile();
+    private static DataFromFile testsByRegionsOverTime = new DataFromFile();
+    private static DataFromFile deathsOverTime = new DataFromFile();
+    private static DataFromFile newlyAdmittedOverTime = new DataFromFile();
+    private static DataFromFile casesByAge = new DataFromFile();
+    private static DataFromFile casesBySex = new DataFromFile();
+
+    // After public DataBase(String folderPath) has been called once, this initializes the object, with previously loaded data
     public DataBase(){
     }
 
+    // Needs to be called once, to intialize the Data
     public DataBase(String folderPath){
         this.folderPath = folderPath;
-        
-        Loader loader = new Loader(folderPath);
-        testsOverTime = loader.LoadTestsOverTime();
-        testsByRegionsOverTime = loader.LoadTestByRegionOverTime();
-        deathsOverTime = loader.LoadDeathsOverTime();
-        newlyAdmittedOverTime = loader.LoadNewlyAdmittedOverTime();
-        casesByAge = loader.LoadCasesByAge();
-        casesBySex = loader.LoadCasesBySex();
+
+        Loader loader = new Loader();
+        testsOverTime = loader.LoadFile(testsOverTimeFilename);
+        testsByRegionsOverTime = loader.LoadFile(testsByRegionOverTimeFilename);
+        deathsOverTime = loader.LoadFile(deathsOverTimeFilename);
+        newlyAdmittedOverTime = loader.LoadFile(newlyAdmittedOverTimeFilename);
+        casesByAge = loader.LoadFile(casesByAgeFilename);
+        casesBySex = loader.LoadFile(casesBySexFilename);
     }
 
-    // *********************************************************************************
-    public record testsEntry(
-            String date,
-            int newPositive,
-            int notPreviousPositive,
-            int positivePercent,
-            int previousPercent,
-            int tested,
-            int testedCumulative
-    ){}
-    private List<testsEntry> testsOverTime = new ArrayList<testsEntry>();
-    // *********************************************************************************
-
-    // *********************************************************************************
-    // If week = total, the values in the other fields is totals of every entry,
-    public record testsByRegionEntry(
-            String week,
-            int region_Hovedstaden,
-            int region_Midtjylland,
-            int region_Nordjylland,
-            int region_Sjaelland,
-            int region_SydDanmark,
-            int StatensSerumInstitut,
-            int TestCenterDanmark,
-            int Total,
-            int TotalCumulative
-    ){}
-    private List<testsByRegionEntry> testsByRegionsOverTime = new ArrayList<testsByRegionEntry>();
-    // *********************************************************************************
-
-    // *********************************************************************************
-    public record deathsEntry(
-            String date,
-            int deaths,
-            int deathsCumulative // Calculated by program, not loaded from file
-    ){}
-    private List<deathsEntry> deathsOverTime = new ArrayList<deathsEntry>();
-    // *********************************************************************************
-
-    // *********************************************************************************
-    public record newlyAdmittedEntry(
-            String date,
-            int region_Hovedstaden,
-            int region_Midtjylland,
-            int region_Nordjylland,
-            int region_Sjaelland,
-            int region_SydDanmark,
-            int region_unknown,
-            int totalCurrentlyAdmitted,
-            int totalCumulativeAdmitted // Calculated by program, not loaded from file
-    ){}
-    private List<newlyAdmittedEntry> newlyAdmittedOverTime = new ArrayList<newlyAdmittedEntry>();
-    // *********************************************************************************
-
-    // *********************************************************************************
-    public record casesByAgeEntry(
-            String ageGroup,
-            int confirmed,
-            int tested,
-            int positivePercentage
-    ){}
-    private List<casesByAgeEntry> casesByAge = new ArrayList<casesByAgeEntry>();
-    // *********************************************************************************
-
-    // *********************************************************************************
-    public record casesBySexEntry(
-            String ageGroup,
-            int womenConfimed,
-            int womenPercent,
-            int MenConfirmed,
-            int MenPercent,
-            int total
-    ){}
-    private List<casesBySexEntry> casesBySex = new ArrayList<casesBySexEntry>();
-    // *********************************************************************************
-
-
-    public testsEntry getTestEntry(int index){
-        return testsOverTime.get(index);
-    }
-    
-    public testsByRegionEntry getTestsByRegionEntry(int index){
-        return testsByRegionsOverTime.get(index);
+    public DataFromFile GetTestOverTimeData(){
+        return testsOverTime;
     }
 
-    public deathsEntry getDeathEntry(int index){
-        return deathsOverTime.get(index);
+    public DataFromFile GetTestsByRegionsOverTimeData(){
+        return testsByRegionsOverTime;
     }
 
-    public newlyAdmittedEntry getNewlyAdmittedEntry(int index){
-        return newlyAdmittedOverTime.get(index);
+    public DataFromFile GetDeathsOverTimeData(){
+        return deathsOverTime;
     }
 
-    public casesByAgeEntry getCasesBeAgeEntry(int index){
-        return casesByAge.get(index);
+    public DataFromFile GetNewlyAdmittedOverTimeData(){
+        return newlyAdmittedOverTime;
     }
 
-    public casesBySexEntry getCasesBySexEntry(int index){
-        return casesBySex.get(index);
+    public DataFromFile GetCasesByAgeData(){
+        return casesByAge;
+    }
+
+    public DataFromFile GetCasesBySexData(){
+        return casesBySex;
     }
 }
-
-
-//class Demo{
-//
-//    public static void main(String[] args) {
-//        // Lav (Instanciate) en ny cirkel
-//        Cirkel minCirkel = new Cirkel(10);
-//        float circumference = minCirkel.GetCurcumference();
-//    }
-//}
-//
-//// Når denne bliver Instancieret skabes et objekt
-//class Cirkel{
-//
-//    // Class member
-//    private float radius;
-//
-//    // Constructor (hvad skal der til for at lave en cirkel
-//    public Cirkel(float radius){
-//        this.radius = radius;
-//    }
-//
-//    // Returnere radius
-//    public float GetRadius(){
-//        return radius;
-//    }
-//
-//    // Returnere en udregnet omkreds
-//    public float GetCurcumference(){
-//        return radius * radius * (float)3.14;
-//    }
-//}
