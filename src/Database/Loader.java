@@ -2,6 +2,7 @@ package Database;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.io.*;
 import java.util.Scanner;
@@ -32,6 +33,20 @@ public class Loader extends DataBase{
             // parsing a CSV file into BufferedReader class constructor
             BufferedReader bufferedReader = new BufferedReader(new FileReader(folderPath + testsOverTimeFilename));
             line = bufferedReader.readLine();
+            String[] keys = bufferedReader.readLine().split(splitBy);
+
+            List<HashMap<String, Integer>> hashMapList = new ArrayList<HashMap<String, Integer>>();
+
+            while ((line = bufferedReader.readLine()) != null){
+                String[] data = line.split(splitBy);
+                HashMap<String, Integer> testOverTimeHashMap = new HashMap<>();
+                for (int i = 0; i < data.length; i++){
+                    testOverTimeHashMap.put(keys[i], Integer.parseInt(data[i]));
+                }
+                hashMapList.add(testOverTimeHashMap);
+            }
+
+
 
             while ((line = bufferedReader.readLine()) != null)
             {
@@ -61,7 +76,7 @@ public class Loader extends DataBase{
         {
             // Tutorial found at https://www.javatpoint.com/java-string-to-int, but adapted a lot
             // parsing a CSV file into BufferedReader class constructor
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(folderPath + testsOverTimeFilename));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(folderPath + testsByRegionOverTimeFilename));
             line = bufferedReader.readLine();
 
             while ((line = bufferedReader.readLine()) != null)
@@ -90,21 +105,121 @@ public class Loader extends DataBase{
     public List<deathsEntry> LoadDeathsOverTime()
     {
         List<deathsEntry> deathsOverTime = new ArrayList<deathsEntry>();
-        return deathsOverTime;
+
+        try
+        {
+            // Tutorial found at https://www.javatpoint.com/java-string-to-int, but adapted a lot
+            // parsing a CSV file into BufferedReader class constructor
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(folderPath + deathsOverTimeFilename));
+            line = bufferedReader.readLine();
+
+            while ((line = bufferedReader.readLine()) != null)
+            {
+                String[] data = line.split(splitBy);
+                deathsOverTime.add(new deathsEntry(data[0],
+                                                   Integer.parseInt(data[1]),
+                                                   Integer.parseInt(data[2])));
+            }
+            return deathsOverTime;
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public List<newlyAdmittedEntry> LoadNewlyAdmittedOverTime(){
+    public List<newlyAdmittedEntry> LoadNewlyAdmittedOverTime()
+    {
         List<newlyAdmittedEntry> newlyAdmittedOverTime = new ArrayList<newlyAdmittedEntry>();
-        return newlyAdmittedOverTime;
+
+        try
+        {
+            // Tutorial found at https://www.javatpoint.com/java-string-to-int, but adapted a lot
+            // parsing a CSV file into BufferedReader class constructor
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(folderPath + newlyAdmittedOverTimeFilename));
+            line = bufferedReader.readLine();
+
+            while ((line = bufferedReader.readLine()) != null)
+            {
+                String[] data = line.split(splitBy);
+                newlyAdmittedOverTime.add(new newlyAdmittedEntry(data[0],
+                                                                 Integer.parseInt(data[1]),
+                                                                 Integer.parseInt(data[2]),
+                                                                 Integer.parseInt(data[3]),
+                                                                 Integer.parseInt(data[4]),
+                                                                 Integer.parseInt(data[5]),
+                                                                 Integer.parseInt(data[6]),
+                                                                 Integer.parseInt(data[7]),
+                                                                 Integer.parseInt(data[8])));
+            }
+            return newlyAdmittedOverTime;
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public List<casesByAgeEntry> LoadCasesByAge(){
+    public List<casesByAgeEntry> LoadCasesByAge()
+    {
         List<casesByAgeEntry> casesByAge = new ArrayList<casesByAgeEntry>();
-        return casesByAge;
+
+        try
+        {
+            // Tutorial found at https://www.javatpoint.com/java-string-to-int, but adapted a lot
+            // parsing a CSV file into BufferedReader class constructor
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(folderPath + casesByAgeFilename));
+            line = bufferedReader.readLine();
+
+            while ((line = bufferedReader.readLine()) != null)
+            {
+                String[] data = line.split(splitBy);
+                casesByAge.add(new casesByAgeEntry(data[0],
+                                                   Integer.parseInt(data[1]),
+                                                   Integer.parseInt(data[2]),
+                                                   Integer.parseInt(data[3])));
+            }
+            return casesByAge;
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public List<casesBySexEntry> LoadCasesBySex(){
-        List<casesBySexEntry> CasesBySex = new ArrayList<casesBySexEntry>();
-        return CasesBySex;
+    public List<casesBySexEntry> LoadCasesBySex()
+    {
+        List<casesBySexEntry> casesBySex = new ArrayList<casesBySexEntry>();
+
+        try
+        {
+            // Tutorial found at https://www.javatpoint.com/java-string-to-int, but adapted a lot
+            // parsing a CSV file into BufferedReader class constructor
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(folderPath + casesBySexFilename));
+            line = bufferedReader.readLine();
+
+            while ((line = bufferedReader.readLine()) != null)
+            {
+                String[] data = line.split(splitBy);
+
+                // parse data even more....
+
+                casesBySex.add(new casesBySexEntry(data[0],
+                                                   Integer.parseInt(data[1]),
+                                                   Integer.parseInt(data[2]),
+                                                   Integer.parseInt(data[3]),
+                                                   Integer.parseInt(data[4]),
+                                                   Integer.parseInt(data[5])));
+            }
+            return casesBySex;
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
