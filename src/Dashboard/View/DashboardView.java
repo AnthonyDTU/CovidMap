@@ -78,7 +78,7 @@ public class DashboardView {
     }
 
 
-    private VBox CreateCompleteUI(VBox dataView, VBox mapView)
+    private VBox CreateCompleteUI(DataView dataView, MapView mapView)
     {
         GridPane mainGridPane = new GridPane();
 
@@ -88,8 +88,8 @@ public class DashboardView {
         column2.setPercentWidth(60);
         mainGridPane.getColumnConstraints().addAll(column1, column2);
 
-        mainGridPane.add(dataView, 0, 0);
-        mainGridPane.add(mapView, 1, 0);
+        //mainGridPane.add(dataView, 0, 0);
+        //mainGridPane.add(mapView, 1, 0);
 
 
         VBox root = new VBox(10);

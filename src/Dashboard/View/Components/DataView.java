@@ -1,6 +1,5 @@
 package Dashboard.View.Components;
 
-import Dashboard.View.ComponentIntializers.DataField;
 import javafx.scene.chart.Chart;
 import javafx.scene.layout.VBox;
 

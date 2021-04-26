@@ -48,7 +48,7 @@ public class DataViewInitializer {
         VBox DataViewVBox = new VBox(10);
         layout.getChildren().addAll(keyNumbersLabel, keyNumbersScrollPane, graphsLabel, graphsScrollPane);
 
-//        return new DataView(layout, );
+        return null;
     }
 
     private void CreateDataChart(){
