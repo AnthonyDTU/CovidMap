@@ -1,4 +1,7 @@
-package Dashboard;
+package Dashboard.Controller;
+
+import Dashboard.Model.DataFile;
+import Dashboard.Model.DashboardModel;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -8,13 +11,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class dashboardController {
+public class DashboardController {
 
-    dashboardModel model;
-    String folderPath;
+    private DashboardModel model;
+    private String folderPath;
 
-    String line = "";
-    String splitBy = ",";
+    private String line = "";
+    private final String splitBy = ",";
 
     private final String testsOverTimeFilename = "Test_pos_over_time.csv";
     private final String testsByRegionOverTimeFilename = "Test_regioner.csv";
@@ -23,17 +26,15 @@ public class dashboardController {
     private final String casesByAgeFilename = "Cases_by_age.csv";
     private final String casesBySexFilename = "Cases_by_sex.csv";
 
-    public dashboardController(dashboardModel model){
+    public DashboardController(DashboardModel model){
         this.model = model;
 
-        // GetFoldePath
-
-        model.setCasesBySexData(LoadFile(folderPath, testsOverTimeFilename));
-        model.setTestsByRegionsOverTimeData(LoadFile(folderPath, testsOverTimeFilename));
-        model.setDeathsOverTimeData(LoadFile(folderPath, deathsOverTimeFilename));
-        model.setNewlyAdmittedOverTimeData(LoadFile(folderPath, newlyAdmittedOverTimeFilename));
-        model.setCasesByAgeData(LoadFile(folderPath, casesByAgeFilename));
-        model.setCasesBySexData(LoadFile(folderPath, casesBySexFilename));
+        model.setCasesBySexData(LoadFile(model.getFolderPath(), testsOverTimeFilename));
+        model.setTestsByRegionsOverTimeData(LoadFile(model.getFolderPath(), testsByRegionOverTimeFilename));
+        model.setDeathsOverTimeData(LoadFile(model.getFolderPath(), deathsOverTimeFilename));
+        model.setNewlyAdmittedOverTimeData(LoadFile(model.getFolderPath(), newlyAdmittedOverTimeFilename));
+        model.setCasesByAgeData(LoadFile(model.getFolderPath(), casesByAgeFilename));
+        model.setCasesBySexData(LoadFile(model.getFolderPath(), casesBySexFilename));
     }
 
 

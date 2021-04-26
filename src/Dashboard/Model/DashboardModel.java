@@ -1,13 +1,13 @@
-package Dashboard;
+package Dashboard.Model;
 
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class dashboardModel extends DataFile{
+public class DashboardModel extends DataFile{
 
-    String folderPath;
+    private String folderPath;
 
     private final String testsOverTimeFilename = "Test_pos_over_time.csv";
     private final String testsByRegionOverTimeFilename = "Test_regioner.csv";
@@ -24,20 +24,20 @@ public class dashboardModel extends DataFile{
     private DataFile casesBySex = new DataFile();
 
     // After public DataBase(String folderPath) has been called once, this initializes the object, with previously loaded data
-    public dashboardModel(){
+    public DashboardModel(){
     }
 
     // Needs to be called once, to intialize the Data
-    public dashboardModel(String folderPath){
+    public DashboardModel(String folderPath){
         this.folderPath = folderPath;
+    }
 
-//        Loader loader = new Loader();
-//        testsOverTime = loader.LoadFile(testsOverTimeFilename);
-//        testsByRegionsOverTime = loader.LoadFile(testsByRegionOverTimeFilename);
-//        deathsOverTime = loader.LoadFile(deathsOverTimeFilename);
-//        newlyAdmittedOverTime = loader.LoadFile(newlyAdmittedOverTimeFilename);
-//        casesByAge = loader.LoadFile(casesByAgeFilename);
-//        casesBySex = loader.LoadFile(casesBySexFilename);
+    public String getFolderPath(){
+        return folderPath;
+    }
+
+    public final void setFolderPath(String folderPath){
+        this.folderPath = folderPath;
     }
 
 
@@ -92,38 +92,5 @@ public class dashboardModel extends DataFile{
 
     public DataFile GetCasesBySexData(){
         return casesBySex;
-    }
-}
-
-class DataFile {
-
-    private String fileName;
-    private List<String> dataFieldKeys = new ArrayList<>();
-    private List<String> lineKeys = new ArrayList<>();
-    private HashMap<String, HashMap<String, Integer>> data = new HashMap<>();
-
-    public DataFile() { }
-
-    public DataFile(String fileName, List<String> dataFieldKeys, List<String> lineKeys, HashMap<String, HashMap<String, Integer>> data){
-        this.fileName = fileName;
-        this.dataFieldKeys = dataFieldKeys;
-        this.lineKeys = lineKeys;
-        this.data = data;
-    }
-
-    public String getFileName(){
-        return fileName;
-    }
-
-    public List<String> getDataFieldKeys(){
-        return dataFieldKeys;
-    }
-
-    public List<String> getLineKeys(){
-        return lineKeys;
-    }
-
-    public HashMap<String, HashMap<String, Integer>> getData() {
-        return data;
     }
 }
