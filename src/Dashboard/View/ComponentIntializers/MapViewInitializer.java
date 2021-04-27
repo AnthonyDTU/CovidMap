@@ -40,8 +40,12 @@ public class MapViewInitializer {
         HBox mapHeader = CreateMapHeader();
         Pane mapPane = CreateMapPane();
 
+
+        mapHeader.setAlignment(Pos.CENTER);
         layout.getChildren().addAll(mapHeader, mapPane);
         layout.setAlignment(Pos.CENTER);
+        layout.setLayoutX(200);
+        layout.setLayoutY(200);
 
         return mapView;
     }
@@ -52,6 +56,8 @@ public class MapViewInitializer {
         GridPane KPIGrid = new GridPane();
         HBox mapHeader = new HBox();
         mapHeader.setMinHeight(75);
+
+        KPIGrid.setAlignment(Pos.CENTER);
 
         RowConstraints titleRow = new RowConstraints();
         RowConstraints KPIRow = new RowConstraints();
@@ -65,13 +71,14 @@ public class MapViewInitializer {
         DataFile regionSummary = data.getRegionSummary();
 
         KPIHeaderLabel = new Label(regionSummary.getLineKeys().get(regionSummary.getLineKeys().size() - 1));
-        KPIGrid.add(KPIHeaderLabel, 0,0);
+        GridPane.setConstraints(KPIHeaderLabel, 0, 0);
+        KPIGrid.getChildren().add(KPIHeaderLabel);
 
         int i = 0;
         for (String KPI : regionSummary.getDataFieldKeys())
         {
             Label KPITitle = new Label(KPI);
-            Label KPIValue = new Label(regionSummary.getData().get(KPI).get(regionSummary.getLineKeys().get(regionSummary.getLineKeys().size() - 1)).toString());
+            Label KPIValue = new Label(regionSummary.getData().get(regionSummary.getLineKeys().get(regionSummary.getLineKeys().size() - 1)).get(KPI).toString());
 
             KPILabelKeys.add(KPI);
             KPITitleLabels.put(KPI, KPITitle);
@@ -83,10 +90,17 @@ public class MapViewInitializer {
             KPIGrid.getColumnConstraints().add(column);
             VBox KPIField = new VBox(10);
             KPIField.getChildren().addAll(KPITitle, KPIValue);
-            KPIGrid.add(KPIField, 1, i);
+            //KPIGrid.getChildren().add(KPIField);
+
+            GridPane.setConstraints(KPIField, i, 1);
+            KPIGrid.getChildren().add(KPIField);
             i++;
         }
+
         mapHeader.getChildren().add(KPIGrid);
+        mapHeader.setLayoutX(100);
+        mapHeader.setLayoutY(100);
+        mapHeader.setAlignment(Pos.CENTER);
 
         return mapHeader;
     }
@@ -117,16 +131,12 @@ public class MapViewInitializer {
         mapPane.getChildren().add(mapImageView);
 
         Button imageViewOverlayButton = new Button();
-        imageViewOverlayButton.setOpacity(0);
+        imageViewOverlayButton.setOpacity(0.1);
         imageViewOverlayButton.setId(regionSummary.getLineKeys().get(regionSummary.getLineKeys().size() - 1));
-        imageViewOverlayButton.setMinSize(mapImageView.getFitWidth(), mapImageView.getFitHeight());
-        imageViewOverlayButton.setPrefSize(mapImageView.getFitWidth(), mapImageView.getFitHeight());
-        imageViewOverlayButton.setMaxSize(mapImageView.getFitWidth(), mapImageView.getFitHeight());
-        imageViewOverlayButton.setLayoutX(0);
-
-        imageViewOverlayButton.setLayoutY(0);
+        imageViewOverlayButton.setPrefSize(750,750);
         imageViewOverlayButton.setOnAction(actionEvent -> mapView.RegionButtonClicked((Button) actionEvent.getSource()));
         mapPane.getChildren().add(imageViewOverlayButton);
+
 
 
         for (int i = 0; i < regionSummary.getLineKeys().size() - 1; i++){
@@ -140,7 +150,7 @@ public class MapViewInitializer {
             regionButton.setShape(new Circle(20)); // Radius calculated based on cases in region
             regionButton.setMinSize(2*20, 2*20); // Radius calculated based on cases in region
             regionButton.setMaxSize(2*20, 2*20); // Radius calculated based on cases in region
-            regionButton.setOpacity(50); // Figure this out
+            regionButton.setOpacity(0.4); // Figure this out
             regionButton.setStyle(new Color(100, 100, 100).toString()); // Find RGB values for color
             regionButton.setOnAction(actionEvent -> mapView.RegionButtonClicked((Button) actionEvent.getSource())); // No clue if this works...
 

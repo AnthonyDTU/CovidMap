@@ -66,7 +66,8 @@ public class DashboardView {
 
         mapView = mapViewInitializer.CreateMapView();
         root = CreateCompleteUI(mapView);
-
+        root.setAlignment(Pos.CENTER);
+        root.setLayoutY(300);
 
         StackPane holder = new StackPane();
         Canvas canvas = new Canvas(1600,  900);

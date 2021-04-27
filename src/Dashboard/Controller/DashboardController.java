@@ -57,10 +57,10 @@ public class DashboardController {
 
             while ((line = bufferedReader.readLine()) != null)
             {
-                data = line.replace(".", "").split(splitBy);
+                data = line.replace(".", "").replace(",",".").split(splitBy);
                 HashMap<String, Integer> dataHashMap = new HashMap<>();
 
-                for (int i = 1; i < data.length - 1; i++){
+                for (int i = 1; i < data.length; i++){
                     dataHashMap.put(dataFieldKeys.get(i - 1), (int)Float.parseFloat(data[i].strip()));
                 }
 
