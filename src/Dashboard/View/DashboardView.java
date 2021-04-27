@@ -7,6 +7,7 @@ import Dashboard.View.ComponentIntializers.DataViewInitializer;
 import Dashboard.View.ComponentIntializers.HeaderBarInitializer;
 import Dashboard.View.ComponentIntializers.MapViewInitializer;
 import Dashboard.View.Components.DataView;
+import Dashboard.View.Components.HeaderBar;
 import Dashboard.View.Components.MapView;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -47,7 +48,7 @@ public class DashboardView {
         this.model = model;
     }
 
-    VBox headerView;
+    HeaderBar headerView;
     DataView dataView;
     MapView mapView;
     VBox root;
@@ -55,20 +56,20 @@ public class DashboardView {
 
     public Parent asParent() {
 
-        HeaderBarInitializer headerBarInitializer = new HeaderBarInitializer();
-        DataViewInitializer dataViewInitializer = new DataViewInitializer();
+        //HeaderBarInitializer headerBarInitializer = new HeaderBarInitializer();
+        //DataViewInitializer dataViewInitializer = new DataViewInitializer();
         MapViewInitializer mapViewInitializer = new MapViewInitializer();
 
-        headerView = headerBarInitializer.CreateHeaderBar();
-        dataView = dataViewInitializer.CreateDataView();
+        //headerView = headerBarInitializer.CreateHeaderBar();
+        //dataView = dataViewInitializer.CreateDataView();
 
 
         mapView = mapViewInitializer.CreateMapView();
-        root = CreateCompleteUI(dataView, mapView);
+        root = CreateCompleteUI(mapView);
 
 
         StackPane holder = new StackPane();
-        Canvas canvas = new Canvas(400,  300);
+        Canvas canvas = new Canvas(1600,  900);
 
         holder.getChildren().add(canvas);
         root.getChildren().add(holder);
@@ -78,7 +79,7 @@ public class DashboardView {
     }
 
 
-    private VBox CreateCompleteUI(DataView dataView, MapView mapView)
+    private VBox CreateCompleteUI(MapView mapView)
     {
         GridPane mainGridPane = new GridPane();
 
@@ -88,8 +89,9 @@ public class DashboardView {
         column2.setPercentWidth(60);
         mainGridPane.getColumnConstraints().addAll(column1, column2);
 
-        //mainGridPane.add(dataView, 0, 0);
-        //mainGridPane.add(mapView, 1, 0);
+
+        //mainGridPane.add(dataView.getMainLayout(), 0, 0);
+        mainGridPane.add(mapView.getMainLayout(), 0, 0);
 
 
         VBox root = new VBox(10);

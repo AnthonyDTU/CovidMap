@@ -17,24 +17,26 @@ public class DashboardController {
     private String folderPath;
 
     private String line = "";
-    private final String splitBy = ",";
+    private final String splitBy = ";";
 
     private final String testsOverTimeFilename = "Test_pos_over_time.csv";
     private final String testsByRegionOverTimeFilename = "Test_regioner.csv";
     private final String deathsOverTimeFilename = "Deaths_over_time.csv";
     private final String newlyAdmittedOverTimeFilename = "Newly_admitted_over_time.csv";
+    private final String regionSummaryFilename = "Region_summary.csv";
     private final String casesByAgeFilename = "Cases_by_age.csv";
     private final String casesBySexFilename = "Cases_by_sex.csv";
 
     public DashboardController(DashboardModel model){
         this.model = model;
 
-        model.setCasesBySexData(LoadFile(model.getFolderPath(), testsOverTimeFilename));
+        model.setTestsOverTimeData(LoadFile(model.getFolderPath(), testsOverTimeFilename));
         model.setTestsByRegionsOverTimeData(LoadFile(model.getFolderPath(), testsByRegionOverTimeFilename));
         model.setDeathsOverTimeData(LoadFile(model.getFolderPath(), deathsOverTimeFilename));
         model.setNewlyAdmittedOverTimeData(LoadFile(model.getFolderPath(), newlyAdmittedOverTimeFilename));
+        model.setRegionSummaryData(LoadFile(model.getFolderPath(), regionSummaryFilename));
         model.setCasesByAgeData(LoadFile(model.getFolderPath(), casesByAgeFilename));
-        model.setCasesBySexData(LoadFile(model.getFolderPath(), casesBySexFilename));
+        //model.setCasesBySexData(LoadFile(model.getFolderPath(), casesBySexFilename));
     }
 
 
@@ -51,14 +53,15 @@ public class DashboardController {
 
             String[] data = bufferedReader.readLine().split(splitBy);
             List<String> dataFieldKeys = new ArrayList<>(Arrays.asList(data));
+            dataFieldKeys.remove(0);
 
             while ((line = bufferedReader.readLine()) != null)
             {
-                data = line.split(splitBy);
+                data = line.replace(".", "").split(splitBy);
                 HashMap<String, Integer> dataHashMap = new HashMap<>();
 
-                for (int i = 1; i < data.length; i++){
-                    dataHashMap.put(dataFieldKeys.get(i), Integer.parseInt(data[i]));
+                for (int i = 1; i < data.length - 1; i++){
+                    dataHashMap.put(dataFieldKeys.get(i - 1), (int)Float.parseFloat(data[i].strip()));
                 }
 
                 hashMaps.put(data[0], dataHashMap);

@@ -13,15 +13,17 @@ public class DashboardModel extends DataFile{
     private final String testsByRegionOverTimeFilename = "Test_regioner.csv";
     private final String deathsOverTimeFilename = "Deaths_over_time.csv";
     private final String newlyAdmittedOverTimeFilename = "Newly_admitted_over_time.csv";
+    private final String regionSummaryFilename = "Region_summary.csv";
     private final String casesByAgeFilename = "Cases_by_age.csv";
     private final String casesBySexFilename = "Cases_by_sex.csv";
 
-    private DataFile testsOverTime = new DataFile();
-    private DataFile testsByRegionsOverTime = new DataFile();
-    private DataFile deathsOverTime = new DataFile();
-    private DataFile newlyAdmittedOverTime = new DataFile();
-    private DataFile casesByAge = new DataFile();
-    private DataFile casesBySex = new DataFile();
+    private static DataFile testsOverTime = new DataFile();
+    private static DataFile testsByRegionsOverTime = new DataFile();
+    private static DataFile deathsOverTime = new DataFile();
+    private static DataFile newlyAdmittedOverTime = new DataFile();
+    private static DataFile regionSummary = new DataFile();
+    private static DataFile casesByAge = new DataFile();
+    private static DataFile casesBySex = new DataFile();
 
     // After public DataBase(String folderPath) has been called once, this initializes the object, with previously loaded data
     public DashboardModel(){
@@ -32,56 +34,49 @@ public class DashboardModel extends DataFile{
         this.folderPath = folderPath;
     }
 
-    public String getFolderPath(){
-        return folderPath;
-    }
 
     public final void setFolderPath(String folderPath){
         this.folderPath = folderPath;
+    }
+    public String getFolderPath(){
+        return folderPath;
     }
 
 
     public final void setTestsOverTimeData(DataFile testsOverTime){
         this.testsOverTime = testsOverTime;
     }
-
     public DataFile getTestsOverTimeData(){
         return testsOverTime;
     }
 
 
-    public void setTestsByRegionsOverTimeData(DataFile testsByRegionsOverTime){
-        this.testsByRegionsOverTime = testsByRegionsOverTime;
-    }
-
-    public DataFile getTestsByRegionsOverTimeData(){
-        return testsByRegionsOverTime;
-    }
+    public final void setTestsByRegionsOverTimeData(DataFile testsByRegionsOverTime){ this.testsByRegionsOverTime = testsByRegionsOverTime; }
+    public DataFile getTestsByRegionsOverTimeData() { return testsByRegionsOverTime; }
 
 
-    public void setDeathsOverTimeData(DataFile deathsOverTime){
+    public final void setDeathsOverTimeData(DataFile deathsOverTime){
         this.deathsOverTime = deathsOverTime;
     }
-
     public DataFile getDeathsOverTimeData(){
         return deathsOverTime;
     }
 
 
-    public void setNewlyAdmittedOverTimeData(DataFile newlyAdmittedOverTime){
-        this.newlyAdmittedOverTime = newlyAdmittedOverTime;
-    }
-
-    public DataFile GetNewlyAdmittedOverTimeData(){
+    public final void setNewlyAdmittedOverTimeData(DataFile newlyAdmittedOverTime) { this.newlyAdmittedOverTime = newlyAdmittedOverTime; }
+    public DataFile getNewlyAdmittedOverTimeData(){
         return newlyAdmittedOverTime;
     }
+
+
+    public final void setRegionSummaryData(DataFile regionSummary) {this.regionSummary = regionSummary; }
+    public DataFile getRegionSummary() { return regionSummary; }
 
 
     public final void setCasesByAgeData(DataFile casesByAge){
         this.casesByAge = casesByAge;
     }
-
-    public DataFile GetCasesByAgeData(){
+    public DataFile getCasesByAgeData(){
         return casesByAge;
     }
 
@@ -89,8 +84,7 @@ public class DashboardModel extends DataFile{
     public final void setCasesBySexData(DataFile casesBySex){
         this.casesBySex = casesBySex;
     }
-
-    public DataFile GetCasesBySexData(){
+    public DataFile getCasesBySexData(){
         return casesBySex;
     }
 }

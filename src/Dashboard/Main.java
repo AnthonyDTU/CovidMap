@@ -15,7 +15,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         // MVC Arcitechture toturial, without fxml: https://stackoverflow.com/questions/36868391/using-javafx-controller-without-fxml
-        DashboardModel model = new DashboardModel("folderPath");
+        DashboardModel model = new DashboardModel("C:\\Users\\Anton\\Desktop\\DTU\\IT Elektronik\\2. Semester\\Objekt Orienteret\\Semester Project\\Covid Data\\");
         DashboardController controller = new DashboardController(model);
         DashboardView view = new DashboardView(controller, model);
 

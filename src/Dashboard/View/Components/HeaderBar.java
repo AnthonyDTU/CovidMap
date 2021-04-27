@@ -2,40 +2,55 @@ package Dashboard.View.Components;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class HeaderBar {
 
+    HBox mainLayout;
     Button menuButton;
-    HashMap<String, KPIField> kpiFields;
-    HashMap<String, Label> kpiLabels;
+    List<String> KPILabelKeys;
+    HashMap<String, Label> KPITitleLabels;
+    HashMap<String, Label> KPIValueLabels;
 
-    public HeaderBar(){
-
-
-
+    public HeaderBar(HBox mainLayout, Button menuButton, List<String> KPILabelKeys, HashMap<String, Label> KPITitleLabels, HashMap<String, Label> KPIValueLabels){
+        this.mainLayout = mainLayout;
+        this.menuButton = menuButton;
+        this.KPILabelKeys = KPILabelKeys;
+        this.KPITitleLabels = KPITitleLabels;
+        this.KPIValueLabels = KPIValueLabels;
     }
-}
 
-class KPIField {
+    public HBox getMainLayout() {
+        return mainLayout;
+    }
 
-    VBox mainLayout;
-    Label titleLabel;
-    Label valueLabel;
-    String title;
-    String value;
+    public Button getMenuButton() {
+        return menuButton;
+    }
 
-    public KPIField(String title, String value){
-        this.title = title;
-        this.value = value;
+    public List<String> getKPILabelKeys() {
+        return KPILabelKeys;
+    }
 
-        titleLabel.setText(title);
-        valueLabel.setText(value);
+    public HashMap<String, Label> getKPITitleLabels() {
+        return KPITitleLabels;
+    }
 
-        mainLayout.setSpacing(10);
-        mainLayout.getChildren().add(titleLabel);
-        mainLayout.getChildren().add(valueLabel);
+    public HashMap<String, Label> getKPIValueLabels() {
+        return KPIValueLabels;
+    }
+
+    // *****************************************************************************************************************
+    // Event Handlers
+    // *****************************************************************************************************************
+
+    public void menuButtonPressed(){
+
     }
 }
