@@ -2,12 +2,18 @@ package Dashboard.View.Components;
 
 import Dashboard.Model.DashboardModel;
 import Dashboard.Model.DataFile;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.chart.Chart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 
@@ -66,18 +72,19 @@ public class MapView {
     }
 
     // *****************************************************************************************************************
-    // Event Handlers
+    // Add Event Handlers
     // *****************************************************************************************************************
 
-    public void RegionButtonClicked(Button regionButton){
+    public void addEventHandlerToRegionButtons(EventHandler<ActionEvent> event){
 
-        DashboardModel data = new DashboardModel();
-        DataFile regionSummary = data.getRegionSummary();
+        List<String> buttonKeys = getButtonKeys();
 
-        KPIHeaderLabel.setText(regionButton.getId());
-        for (String key : KPILabelKeys )
-        {
-            KPIValueLabels.get(key).setText(regionSummary.getData().get(key).get(regionButton.getId()).toString());
+        for (String buttonKey : regionButtonKeys) {
+            regionButtons.get(buttonKey).setOnAction(event);
         }
     }
+
+
+
+
 }

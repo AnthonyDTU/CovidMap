@@ -9,13 +9,13 @@ public class DashboardModel extends DataFile{
 
     private String folderPath;
 
-    private final String testsOverTimeFilename = "Test_pos_over_time.csv";
-    private final String testsByRegionOverTimeFilename = "Test_regioner.csv";
-    private final String deathsOverTimeFilename = "Deaths_over_time.csv";
-    private final String newlyAdmittedOverTimeFilename = "Newly_admitted_over_time.csv";
-    private final String regionSummaryFilename = "Region_summary.csv";
-    private final String casesByAgeFilename = "Cases_by_age.csv";
-    private final String casesBySexFilename = "Cases_by_sex.csv";
+    // private final String testsOverTimeFilename = "Test_pos_over_time.csv";
+    // private final String testsByRegionOverTimeFilename = "Test_regioner.csv";
+    // private final String deathsOverTimeFilename = "Deaths_over_time.csv";
+    // private final String newlyAdmittedOverTimeFilename = "Newly_admitted_over_time.csv";
+    // private final String regionSummaryFilename = "Region_summary.csv";
+    // private final String casesByAgeFilename = "Cases_by_age.csv";
+    // private final String casesBySexFilename = "Cases_by_sex.csv";
 
     private static DataFile testsOverTime = new DataFile();
     private static DataFile testsByRegionsOverTime = new DataFile();

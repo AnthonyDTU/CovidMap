@@ -1,9 +1,9 @@
-package Dashboard.View.ComponentIntializers;
+package Dashboard.Controller.ComponentIntializers;
 
+import Dashboard.Controller.DashboardController;
 import Dashboard.Model.DashboardModel;
 import Dashboard.Model.DataFile;
 import Dashboard.View.Components.MapView;
-import com.sun.javafx.geom.Shape;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -31,6 +31,8 @@ public class MapViewInitializer {
     HashMap<String, Label> KPITitleLabels = new HashMap<>();
     HashMap<String, Label> KPIValueLabels = new HashMap<>();
 
+    DashboardController controller;
+
     public MapViewInitializer(){
         mapView = new MapView(layout, mapImageView, buttonKeys, regionButtons, KPIHeaderLabel, KPILabelKeys, KPITitleLabels, KPIValueLabels);
     }
@@ -43,7 +45,7 @@ public class MapViewInitializer {
 
         mapHeader.setAlignment(Pos.CENTER);
         layout.getChildren().addAll(mapHeader, mapPane);
-        layout.setAlignment(Pos.CENTER);
+        //layout.setAlignment(Pos.CENTER);
         layout.setLayoutX(200);
         layout.setLayoutY(200);
 
@@ -128,31 +130,41 @@ public class MapViewInitializer {
         Pane mapPane = new Pane();
         mapPane.setPrefHeight(750);
         mapPane.setPrefSize(mapImageView.getFitWidth(), mapImageView.getFitHeight());
-        mapPane.getChildren().add(mapImageView);
+        //mapPane.getChildren().add(mapImageView);
+
 
         Button imageViewOverlayButton = new Button();
+        imageViewOverlayButton.arm();
+        imageViewOverlayButton.setDisable(false);
         imageViewOverlayButton.setOpacity(0.1);
         imageViewOverlayButton.setId(regionSummary.getLineKeys().get(regionSummary.getLineKeys().size() - 1));
         imageViewOverlayButton.setPrefSize(750,750);
-        imageViewOverlayButton.setOnAction(actionEvent -> mapView.RegionButtonClicked((Button) actionEvent.getSource()));
-        mapPane.getChildren().add(imageViewOverlayButton);
+        //imageViewOverlayButton.setOnAction(actionEvent -> controller.RegionButtonPressed((Button) actionEvent.getSource(), mapView));
+
+
+
+       // mapPane.getChildren().add(imageViewOverlayButton);
 
 
 
         for (int i = 0; i < regionSummary.getLineKeys().size() - 1; i++){
 
-            Button regionButton = new Button();
+            Button regionButton = new Button("Region");
 
             regionButton.setId(regionSummary.getLineKeys().get(i));
             regionButton.setAlignment(Pos.CENTER);
+            regionButton.arm();
             regionButton.setLayoutX(100); // Coordinates needed.
             regionButton.setLayoutY(100); // Coordinates needed.
             regionButton.setShape(new Circle(20)); // Radius calculated based on cases in region
             regionButton.setMinSize(2*20, 2*20); // Radius calculated based on cases in region
             regionButton.setMaxSize(2*20, 2*20); // Radius calculated based on cases in region
-            regionButton.setOpacity(0.4); // Figure this out
+            regionButton.setOpacity(1); // Figure this out
             regionButton.setStyle(new Color(100, 100, 100).toString()); // Find RGB values for color
-            regionButton.setOnAction(actionEvent -> mapView.RegionButtonClicked((Button) actionEvent.getSource())); // No clue if this works...
+            //regionButton.setOnAction(actionEvent -> Da((Button) actionEvent.getSource(), mapView)); // No clue if this works...
+
+            //regionButton.onActionProperty().addListener(observable -> controller.RegionButtonPressed(regionButton, mapView));
+
 
             buttonKeys.add(regionSummary.getLineKeys().get(i));
             regionButtons.put(regionSummary.getLineKeys().get(i), regionButton);
@@ -161,5 +173,4 @@ public class MapViewInitializer {
 
         return mapPane;
     }
-
 }

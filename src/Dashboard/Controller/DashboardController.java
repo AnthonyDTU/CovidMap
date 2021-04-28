@@ -2,7 +2,13 @@ package Dashboard.Controller;
 
 import Dashboard.Model.DataFile;
 import Dashboard.Model.DashboardModel;
+import Dashboard.Controller.ComponentIntializers.MapViewInitializer;
+import Dashboard.View.DashboardView;
+import javafx.scene.control.Button;
 
+
+import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,6 +20,7 @@ import java.util.List;
 public class DashboardController {
 
     private DashboardModel model;
+    private DashboardView view;
     private String folderPath;
 
     private String line = "";
@@ -27,19 +34,22 @@ public class DashboardController {
     private final String casesByAgeFilename = "Cases_by_age.csv";
     private final String casesBySexFilename = "Cases_by_sex.csv";
 
-    public DashboardController(DashboardModel model){
+    public DashboardController(DashboardModel model, DashboardView view){
         this.model = model;
+        this.view = view;
 
-        model.setTestsOverTimeData(LoadFile(model.getFolderPath(), testsOverTimeFilename));
-        model.setTestsByRegionsOverTimeData(LoadFile(model.getFolderPath(), testsByRegionOverTimeFilename));
-        model.setDeathsOverTimeData(LoadFile(model.getFolderPath(), deathsOverTimeFilename));
-        model.setNewlyAdmittedOverTimeData(LoadFile(model.getFolderPath(), newlyAdmittedOverTimeFilename));
-        model.setRegionSummaryData(LoadFile(model.getFolderPath(), regionSummaryFilename));
-        model.setCasesByAgeData(LoadFile(model.getFolderPath(), casesByAgeFilename));
+        this.model.setTestsOverTimeData(LoadFile(model.getFolderPath(), testsOverTimeFilename));
+        this.model.setTestsByRegionsOverTimeData(LoadFile(model.getFolderPath(), testsByRegionOverTimeFilename));
+        this.model.setDeathsOverTimeData(LoadFile(model.getFolderPath(), deathsOverTimeFilename));
+        this.model.setNewlyAdmittedOverTimeData(LoadFile(model.getFolderPath(), newlyAdmittedOverTimeFilename));
+        this.model.setRegionSummaryData(LoadFile(model.getFolderPath(), regionSummaryFilename));
+        this.model.setCasesByAgeData(LoadFile(model.getFolderPath(), casesByAgeFilename));
         //model.setCasesBySexData(LoadFile(model.getFolderPath(), casesBySexFilename));
+
+        MapViewInitializer mapViewInitializer = new MapViewInitializer();
+        this.view.setMapView(mapViewInitializer.CreateMapView());
+        this.view.getMapView().addEventHandlerToRegionButtons(new RegionButtonEventHandler());
     }
-
-
 
     public DataFile LoadFile(String folderPath, String fileName)
     {
@@ -77,4 +87,29 @@ public class DashboardController {
         }
         return null;
     }
+
+
+    class RegionButtonEventHandler implements EventHandler<ActionEvent> {
+
+        @Override
+        public void handle(ActionEvent actionEvent) {
+
+            Button sender = (Button)actionEvent.getSource();
+            DashboardModel data = new DashboardModel();
+            DataFile regionSummary = model.getRegionSummary();
+
+
+
+            var KPILabelKeys = view.getMapView().getKPILabelKeys();
+            var KPIHeaderLabel = view.getMapView().getKPIHeaderLabel();
+            var KPIValueLabels = view.getMapView().getKPIValueLabels();
+
+            KPIHeaderLabel.setText(sender.getId());
+            for (String key : KPILabelKeys )
+            {
+                KPIValueLabels.get(key).setText(regionSummary.getData().get(sender.getId()).get(key).toString());
+            }
+        }
+    }
+
 }

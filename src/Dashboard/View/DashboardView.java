@@ -2,29 +2,16 @@ package Dashboard.View;
 
 import Dashboard.Controller.DashboardController;
 import Dashboard.Model.DashboardModel;
-import Dashboard.Model.DataFile;
-import Dashboard.View.ComponentIntializers.DataViewInitializer;
-import Dashboard.View.ComponentIntializers.HeaderBarInitializer;
-import Dashboard.View.ComponentIntializers.MapViewInitializer;
 import Dashboard.View.Components.DataView;
 import Dashboard.View.Components.HeaderBar;
 import Dashboard.View.Components.MapView;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,10 +29,23 @@ public class DashboardView {
 
     private GridPane view ;
 
-    public DashboardView(DashboardController controller, DashboardModel model){
+    public DashboardView(){
 
-        this.controller = controller;
-        this.model = model;
+    }
+
+
+    public void setMapView(MapView mapView){
+        this.mapView = mapView;
+    }
+
+
+    public MapView getMapView() {
+        return mapView;
+    }
+
+
+    public DataView getDataView(){
+        return dataView;
     }
 
     HeaderBar headerView;
@@ -58,22 +58,22 @@ public class DashboardView {
 
         //HeaderBarInitializer headerBarInitializer = new HeaderBarInitializer();
         //DataViewInitializer dataViewInitializer = new DataViewInitializer();
-        MapViewInitializer mapViewInitializer = new MapViewInitializer();
+
 
         //headerView = headerBarInitializer.CreateHeaderBar();
         //dataView = dataViewInitializer.CreateDataView();
 
+        // StackPane holder = new StackPane();
+        // Canvas canvas = new Canvas(1600,  900);
+        // holder.getChildren().add(canvas);
+        // root.getChildren().add(holder);
+        root = mapView.getMainLayout();
 
-        mapView = mapViewInitializer.CreateMapView();
-        root = CreateCompleteUI(mapView);
+        //Button button = new Button("Press");
+
+        //root.getChildren().add(button);
         root.setAlignment(Pos.CENTER);
         root.setLayoutY(300);
-
-        StackPane holder = new StackPane();
-        Canvas canvas = new Canvas(1600,  900);
-
-        holder.getChildren().add(canvas);
-        root.getChildren().add(holder);
 
 
         return root ;
@@ -90,10 +90,9 @@ public class DashboardView {
         column2.setPercentWidth(60);
         mainGridPane.getColumnConstraints().addAll(column1, column2);
 
-
         //mainGridPane.add(dataView.getMainLayout(), 0, 0);
         mainGridPane.add(mapView.getMainLayout(), 0, 0);
-
+        mainGridPane.getChildren().add(mapView.getMainLayout());
 
         VBox root = new VBox(10);
         root.setAlignment(Pos.CENTER);

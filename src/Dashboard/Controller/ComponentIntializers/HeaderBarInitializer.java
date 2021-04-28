@@ -1,10 +1,9 @@
-package Dashboard.View.ComponentIntializers;
+package Dashboard.Controller.ComponentIntializers;
 
 import Dashboard.View.Components.HeaderBar;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
 import java.awt.*;
 import java.util.ArrayList;
