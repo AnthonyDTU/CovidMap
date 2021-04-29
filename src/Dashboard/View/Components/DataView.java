@@ -10,15 +10,15 @@ public class DataView {
     VBox mainLayout;
     List<String> chartsKeys;
     HashMap<String, Chart> charts;
-    List<String> dataFieldsKeys;
-    HashMap<String, DataField> dataFields;
+    List<String> kpiFieldKeys;
+    HashMap<String, KPIField> kpiFields;
 
-    public DataView(VBox mainLayout, List<String> chartsKeys, HashMap<String, Chart> charts, List<String> dataFieldKeys, HashMap<String, DataField> dataFields){
+    public DataView(VBox mainLayout, List<String> chartsKeys, HashMap<String, Chart> charts, List<String> kpiFieldKeys, HashMap<String, KPIField> kpiFields){
         this.mainLayout = mainLayout;
         this.chartsKeys = chartsKeys;
         this.charts = charts;
-        this.dataFieldsKeys = dataFieldKeys;
-        this.dataFields = dataFields;
+        this.kpiFieldKeys = kpiFieldKeys;
+        this.kpiFields = kpiFields;
     }
 
     public VBox getMainLayout(){
@@ -33,19 +33,19 @@ public class DataView {
         return charts;
     }
 
-    public List<String> getDataFieldsKeys(){
-        return dataFieldsKeys;
+    public List<String> getKpiFieldKeys(){
+        return kpiFieldKeys;
     }
 
-    public HashMap<String, DataField> getDataFields(){
-        return dataFields;
+    public HashMap<String, KPIField> getKpiFields(){
+        return kpiFields;
+    }
+
+    public void updateDataField(String key, String title, String value){
+
+        kpiFields.get(key).setTitle(title);
+        kpiFields.get(key).setValue(value);
     }
 }
 
 
-
-class DataField{
-
-
-
-}

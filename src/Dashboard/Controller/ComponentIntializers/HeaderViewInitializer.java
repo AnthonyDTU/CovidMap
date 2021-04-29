@@ -1,6 +1,6 @@
 package Dashboard.Controller.ComponentIntializers;
 
-import Dashboard.View.Components.HeaderBar;
+import Dashboard.View.Components.HeaderView;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -10,20 +10,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class HeaderBarInitializer {
+public class HeaderViewInitializer {
 
-    HeaderBar headerBar;
+    HeaderView headerBar;
     HBox mainLayout = new HBox(10);
     Button menuButton = new Button();
     List<String> KPILabelKeys = new ArrayList<>();
     HashMap<String, javafx.scene.control.Label> KPITitleLabels = new HashMap<>();
     HashMap<String, Label> KPIValueLabels = new HashMap<>();
 
-    public HeaderBarInitializer(){
-        headerBar = new HeaderBar(mainLayout, menuButton, KPILabelKeys, KPITitleLabels, KPIValueLabels);
+    public HeaderViewInitializer(){
+        headerBar = new HeaderView(mainLayout, menuButton, KPILabelKeys, KPITitleLabels, KPIValueLabels);
     }
 
-    public HeaderBar CreateHeaderBar(){
+    public HeaderView CreateHeaderView(){
 
 
         return null;

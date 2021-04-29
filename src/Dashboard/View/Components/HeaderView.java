@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class HeaderBar {
+public class HeaderView {
 
     HBox mainLayout;
     Button menuButton;
@@ -18,7 +18,7 @@ public class HeaderBar {
     HashMap<String, Label> KPITitleLabels;
     HashMap<String, Label> KPIValueLabels;
 
-    public HeaderBar(HBox mainLayout, Button menuButton, List<String> KPILabelKeys, HashMap<String, Label> KPITitleLabels, HashMap<String, Label> KPIValueLabels){
+    public HeaderView(HBox mainLayout, Button menuButton, List<String> KPILabelKeys, HashMap<String, Label> KPITitleLabels, HashMap<String, Label> KPIValueLabels){
         this.mainLayout = mainLayout;
         this.menuButton = menuButton;
         this.KPILabelKeys = KPILabelKeys;

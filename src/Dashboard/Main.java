@@ -5,10 +5,7 @@ import Dashboard.Model.DashboardModel;
 import Dashboard.View.DashboardView;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -21,10 +18,6 @@ public class Main extends Application {
         DashboardModel model = new DashboardModel("C:\\Users\\Anton\\Desktop\\DTU\\IT Elektronik\\2. Semester\\Objekt Orienteret\\Semester Project\\Covid Data\\");
         DashboardView view = new DashboardView();
         DashboardController controller = new DashboardController(model, view);
-
-
-
-
 
 
         Scene scene = new Scene(view.asParent(), 1600, 900);

@@ -1,14 +1,16 @@
 package Dashboard.Controller;
 
+import Dashboard.Controller.ComponentIntializers.DataViewInitializer;
+import Dashboard.Controller.ComponentIntializers.HeaderViewInitializer;
 import Dashboard.Model.DataFile;
 import Dashboard.Model.DashboardModel;
 import Dashboard.Controller.ComponentIntializers.MapViewInitializer;
 import Dashboard.View.DashboardView;
 import javafx.scene.control.Button;
-
-
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -38,6 +40,7 @@ public class DashboardController {
         this.model = model;
         this.view = view;
 
+        // Intitialize the Model
         this.model.setTestsOverTimeData(LoadFile(model.getFolderPath(), testsOverTimeFilename));
         this.model.setTestsByRegionsOverTimeData(LoadFile(model.getFolderPath(), testsByRegionOverTimeFilename));
         this.model.setDeathsOverTimeData(LoadFile(model.getFolderPath(), deathsOverTimeFilename));
@@ -46,9 +49,22 @@ public class DashboardController {
         this.model.setCasesByAgeData(LoadFile(model.getFolderPath(), casesByAgeFilename));
         //model.setCasesBySexData(LoadFile(model.getFolderPath(), casesBySexFilename));
 
+        // Intialize the View
+        // Header Bar:
+        HeaderViewInitializer headerBarInitializer = new HeaderViewInitializer();
+        this.view.setHeaderView(headerBarInitializer.CreateHeaderView());
+        //
+        // Map View:
         MapViewInitializer mapViewInitializer = new MapViewInitializer();
         this.view.setMapView(mapViewInitializer.CreateMapView());
         this.view.getMapView().addEventHandlerToRegionButtons(new RegionButtonEventHandler());
+        this.view.getMapView().addEventHandlerToImageVIew(new ImageViewEventHandler());
+        //
+        // Data View:
+        DataViewInitializer dataViewInitializer = new DataViewInitializer();
+        this.view.setDataView(dataViewInitializer.CreateDataView());
+
+
     }
 
     public DataFile LoadFile(String folderPath, String fileName)
@@ -79,6 +95,7 @@ public class DashboardController {
             }
 
             // Idea for returning multiple variables found here: https://www.geeksforgeeks.org/returning-multiple-values-in-java/
+            // Turned out to work great, since all data in a category can just be loaded by getting the DataFile() class.
             return new DataFile(fileName, dataFieldKeys, lineKeys, hashMaps);
         }
         catch (IOException e)
@@ -92,24 +109,32 @@ public class DashboardController {
     class RegionButtonEventHandler implements EventHandler<ActionEvent> {
 
         @Override
-        public void handle(ActionEvent actionEvent) {
-
+        public void handle(ActionEvent actionEvent)
+        {
             Button sender = (Button)actionEvent.getSource();
-            DashboardModel data = new DashboardModel();
-            DataFile regionSummary = model.getRegionSummary();
-
-
-
-            var KPILabelKeys = view.getMapView().getKPILabelKeys();
-            var KPIHeaderLabel = view.getMapView().getKPIHeaderLabel();
-            var KPIValueLabels = view.getMapView().getKPIValueLabels();
-
-            KPIHeaderLabel.setText(sender.getId());
-            for (String key : KPILabelKeys )
-            {
-                KPIValueLabels.get(key).setText(regionSummary.getData().get(sender.getId()).get(key).toString());
-            }
+            UpdateRegionKPIFields(sender.getId());
         }
     }
 
+    class ImageViewEventHandler implements EventHandler<MouseEvent>{
+
+        @Override
+        public void handle(MouseEvent mouseEvent)
+        {
+            ImageView sender = (ImageView)mouseEvent.getSource();
+            UpdateRegionKPIFields(sender.getId());
+        }
+    }
+
+    private void UpdateRegionKPIFields(String senderID)
+    {
+        DataFile regionSummary = model.getRegionSummary();
+        view.getMapView().setKPIHeaderLabel(senderID);
+
+        var KPIFieldKeys = view.getMapView().getKPIFieldKeys();
+        for (String key : KPIFieldKeys )
+        {
+            view.getMapView().setKPIFieldValue(key, regionSummary.getData().get(senderID).get(key).toString());
+        }
+    }
 }

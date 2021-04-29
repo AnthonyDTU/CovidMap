@@ -1,21 +1,16 @@
 package Dashboard.Model;
 
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 public class DashboardModel extends DataFile{
 
     private String folderPath;
 
-    // private final String testsOverTimeFilename = "Test_pos_over_time.csv";
-    // private final String testsByRegionOverTimeFilename = "Test_regioner.csv";
-    // private final String deathsOverTimeFilename = "Deaths_over_time.csv";
-    // private final String newlyAdmittedOverTimeFilename = "Newly_admitted_over_time.csv";
-    // private final String regionSummaryFilename = "Region_summary.csv";
-    // private final String casesByAgeFilename = "Cases_by_age.csv";
-    // private final String casesBySexFilename = "Cases_by_sex.csv";
+    private final String testsOverTimeFilename = "Test_pos_over_time.csv";
+    private final String testsByRegionOverTimeFilename = "Test_regioner.csv";
+    private final String deathsOverTimeFilename = "Deaths_over_time.csv";
+    private final String newlyAdmittedOverTimeFilename = "Newly_admitted_over_time.csv";
+    private final String regionSummaryFilename = "Region_summary.csv";
+    private final String casesByAgeFilename = "Cases_by_age.csv";
+    private final String casesBySexFilename = "Cases_by_sex.csv";
 
     private static DataFile testsOverTime = new DataFile();
     private static DataFile testsByRegionsOverTime = new DataFile();
@@ -51,7 +46,9 @@ public class DashboardModel extends DataFile{
     }
 
 
-    public final void setTestsByRegionsOverTimeData(DataFile testsByRegionsOverTime){ this.testsByRegionsOverTime = testsByRegionsOverTime; }
+    public final void setTestsByRegionsOverTimeData(DataFile testsByRegionsOverTime) {
+        this.testsByRegionsOverTime = testsByRegionsOverTime;
+    }
     public DataFile getTestsByRegionsOverTimeData() { return testsByRegionsOverTime; }
 
 
@@ -63,14 +60,20 @@ public class DashboardModel extends DataFile{
     }
 
 
-    public final void setNewlyAdmittedOverTimeData(DataFile newlyAdmittedOverTime) { this.newlyAdmittedOverTime = newlyAdmittedOverTime; }
+    public final void setNewlyAdmittedOverTimeData(DataFile newlyAdmittedOverTime) {
+        this.newlyAdmittedOverTime = newlyAdmittedOverTime;
+    }
     public DataFile getNewlyAdmittedOverTimeData(){
         return newlyAdmittedOverTime;
     }
 
 
-    public final void setRegionSummaryData(DataFile regionSummary) {this.regionSummary = regionSummary; }
-    public DataFile getRegionSummary() { return regionSummary; }
+    public final void setRegionSummaryData(DataFile regionSummary) {
+        this.regionSummary = regionSummary;
+    }
+    public DataFile getRegionSummary() {
+        return regionSummary;
+    }
 
 
     public final void setCasesByAgeData(DataFile casesByAge){

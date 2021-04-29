@@ -1,8 +1,8 @@
 package Dashboard.Controller.ComponentIntializers;
 
-import Dashboard.Controller.DashboardController;
 import Dashboard.Model.DashboardModel;
 import Dashboard.Model.DataFile;
+import Dashboard.View.Components.KPIField;
 import Dashboard.View.Components.MapView;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -11,7 +11,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Circle;
-
 import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -27,145 +26,103 @@ public class MapViewInitializer {
     HashMap<String, Button> regionButtons = new HashMap<>();
     Label KPIHeaderLabel = new Label();
     ImageView mapImageView = new ImageView();
-    List<String> KPILabelKeys = new ArrayList<>();
-    HashMap<String, Label> KPITitleLabels = new HashMap<>();
-    HashMap<String, Label> KPIValueLabels = new HashMap<>();
+    List<String> KPIFieldKeys = new ArrayList<>();
+    HashMap<String, KPIField> KPIFields = new HashMap<>();
 
-    DashboardController controller;
 
     public MapViewInitializer(){
-        mapView = new MapView(layout, mapImageView, buttonKeys, regionButtons, KPIHeaderLabel, KPILabelKeys, KPITitleLabels, KPIValueLabels);
+        mapView = new MapView(layout, mapImageView, buttonKeys, regionButtons, KPIHeaderLabel, KPIFieldKeys, KPIFields);
     }
+
 
     public MapView CreateMapView() {
 
         HBox mapHeader = CreateMapHeader();
+        mapHeader.setAlignment(Pos.CENTER);
+
         Pane mapPane = CreateMapPane();
 
-
-        mapHeader.setAlignment(Pos.CENTER);
         layout.getChildren().addAll(mapHeader, mapPane);
-        //layout.setAlignment(Pos.CENTER);
+        layout.setAlignment(Pos.CENTER);
         layout.setLayoutX(200);
         layout.setLayoutY(200);
 
         return mapView;
     }
 
+
     private HBox CreateMapHeader(){
 
         // Map Header
         GridPane KPIGrid = new GridPane();
-        HBox mapHeader = new HBox();
-        mapHeader.setMinHeight(75);
-
-        KPIGrid.setAlignment(Pos.CENTER);
-
-        RowConstraints titleRow = new RowConstraints();
-        RowConstraints KPIRow = new RowConstraints();
-
-        titleRow.setPercentHeight(40);
-        KPIRow.setPercentHeight(60);
-
-        KPIGrid.getRowConstraints().addAll(titleRow, KPIRow);
 
         DashboardModel data = new DashboardModel();
         DataFile regionSummary = data.getRegionSummary();
 
-        KPIHeaderLabel = new Label(regionSummary.getLineKeys().get(regionSummary.getLineKeys().size() - 1));
+        KPIGrid.getRowConstraints().addAll(createNewRow(40), createNewRow(60));
+        KPIGrid.setAlignment(Pos.CENTER);
+
+        KPIHeaderLabel.setText(regionSummary.getLineKeys().get(regionSummary.getLineKeys().size() - 1));
         GridPane.setConstraints(KPIHeaderLabel, 0, 0);
         KPIGrid.getChildren().add(KPIHeaderLabel);
 
         int i = 0;
         for (String KPI : regionSummary.getDataFieldKeys())
         {
-            Label KPITitle = new Label(KPI);
-            Label KPIValue = new Label(regionSummary.getData().get(regionSummary.getLineKeys().get(regionSummary.getLineKeys().size() - 1)).get(KPI).toString());
+            KPIFieldKeys.add(KPI);
+            KPIFields.put(KPI, new KPIField(KPI, regionSummary.getData().get(regionSummary.getLineKeys().get(regionSummary.getLineKeys().size() - 1)).get(KPI).toString()));
 
-            KPILabelKeys.add(KPI);
-            KPITitleLabels.put(KPI, KPITitle);
-            KPIValueLabels.put(KPI, KPIValue);
-
-            ColumnConstraints column = new ColumnConstraints();
-            column.setPercentWidth((int)(100 / regionSummary.getDataFieldKeys().size()));
-
-            KPIGrid.getColumnConstraints().add(column);
-            VBox KPIField = new VBox(10);
-            KPIField.getChildren().addAll(KPITitle, KPIValue);
-            //KPIGrid.getChildren().add(KPIField);
-
-            GridPane.setConstraints(KPIField, i, 1);
-            KPIGrid.getChildren().add(KPIField);
-            i++;
+            KPIGrid.getColumnConstraints().add(createNewColumn((int)(100 / regionSummary.getDataFieldKeys().size())));
+            GridPane.setConstraints(KPIFields.get(KPI).getLayout(), i++, 1);
+            KPIGrid.getChildren().add(KPIFields.get(KPI).getLayout());
         }
 
-        mapHeader.getChildren().add(KPIGrid);
-        mapHeader.setLayoutX(100);
-        mapHeader.setLayoutY(100);
+        HBox mapHeader = new HBox();
+        mapHeader.setMinHeight(75);
         mapHeader.setAlignment(Pos.CENTER);
+        mapHeader.getChildren().add(KPIGrid);
 
         return mapHeader;
     }
 
 
+    private ColumnConstraints createNewColumn(int percentWidht){
+        ColumnConstraints column = new ColumnConstraints();
+        column.setPercentWidth(percentWidht);
+        return column;
+    }
+
+    private RowConstraints createNewRow(int percentHeight){
+        RowConstraints row = new RowConstraints();
+        row.setPercentHeight(percentHeight);
+        return row;
+    }
+
+
     private Pane CreateMapPane()
     {
-
+        Pane mapPane = new Pane();
         DashboardModel data = new DashboardModel();
         DataFile regionSummary = data.getRegionSummary();
-
-        // Figure out button coordinates
 
         try
         {
             mapImageView.setImage(new Image(new FileInputStream("Regionskort.jpg")));
             mapImageView.setPreserveRatio(true);
             mapImageView.setFitHeight(750);
+            mapImageView.setId(regionSummary.getLineKeys().get(regionSummary.getLineKeys().size() - 1));
         }
         catch (FileNotFoundException e)
         {
-
+            // MessageBox
         }
 
-        Pane mapPane = new Pane();
         mapPane.setPrefHeight(750);
-        mapPane.setPrefSize(mapImageView.getFitWidth(), mapImageView.getFitHeight());
-        //mapPane.getChildren().add(mapImageView);
+        mapPane.getChildren().add(mapImageView);
 
-
-        Button imageViewOverlayButton = new Button();
-        imageViewOverlayButton.arm();
-        imageViewOverlayButton.setDisable(false);
-        imageViewOverlayButton.setOpacity(0.1);
-        imageViewOverlayButton.setId(regionSummary.getLineKeys().get(regionSummary.getLineKeys().size() - 1));
-        imageViewOverlayButton.setPrefSize(750,750);
-        //imageViewOverlayButton.setOnAction(actionEvent -> controller.RegionButtonPressed((Button) actionEvent.getSource(), mapView));
-
-
-
-       // mapPane.getChildren().add(imageViewOverlayButton);
-
-
-
-        for (int i = 0; i < regionSummary.getLineKeys().size() - 1; i++){
-
-            Button regionButton = new Button("Region");
-
-            regionButton.setId(regionSummary.getLineKeys().get(i));
-            regionButton.setAlignment(Pos.CENTER);
-            regionButton.arm();
-            regionButton.setLayoutX(100); // Coordinates needed.
-            regionButton.setLayoutY(100); // Coordinates needed.
-            regionButton.setShape(new Circle(20)); // Radius calculated based on cases in region
-            regionButton.setMinSize(2*20, 2*20); // Radius calculated based on cases in region
-            regionButton.setMaxSize(2*20, 2*20); // Radius calculated based on cases in region
-            regionButton.setOpacity(1); // Figure this out
-            regionButton.setStyle(new Color(100, 100, 100).toString()); // Find RGB values for color
-            //regionButton.setOnAction(actionEvent -> Da((Button) actionEvent.getSource(), mapView)); // No clue if this works...
-
-            //regionButton.onActionProperty().addListener(observable -> controller.RegionButtonPressed(regionButton, mapView));
-
-
+        for (int i = 0; i < regionSummary.getLineKeys().size() - 1; i++)
+        {
+            Button regionButton = createRegionButton(regionSummary.getLineKeys().get(i));
             buttonKeys.add(regionSummary.getLineKeys().get(i));
             regionButtons.put(regionSummary.getLineKeys().get(i), regionButton);
             mapPane.getChildren().add(regionButton);
@@ -173,4 +130,23 @@ public class MapViewInitializer {
 
         return mapPane;
     }
+
+
+    private Button createRegionButton(String ButtonID){
+
+        Button regionButton = new Button();
+
+        regionButton.setId(ButtonID);
+        regionButton.setAlignment(Pos.CENTER);
+        regionButton.setLayoutX(100); // Coordinates needed.
+        regionButton.setLayoutY(100); // Coordinates needed.
+        regionButton.setShape(new Circle(20)); // Radius calculated based on cases in region
+        regionButton.setMinSize(2*20, 2*20); // Radius calculated based on cases in region
+        regionButton.setMaxSize(2*20, 2*20); // Radius calculated based on cases in region
+        regionButton.setOpacity(1); // Figure this out
+        regionButton.setStyle(new Color(100, 100, 100).toString()); // Find RGB values for color
+
+        return regionButton;
+    }
+
 }

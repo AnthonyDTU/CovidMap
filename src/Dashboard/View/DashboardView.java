@@ -3,7 +3,7 @@ package Dashboard.View;
 import Dashboard.Controller.DashboardController;
 import Dashboard.Model.DashboardModel;
 import Dashboard.View.Components.DataView;
-import Dashboard.View.Components.HeaderBar;
+import Dashboard.View.Components.HeaderView;
 import Dashboard.View.Components.MapView;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -11,7 +11,6 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.layout.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,17 +19,26 @@ public class DashboardView {
     DashboardController controller;
     DashboardModel model;
 
+    HeaderView headerView;
+    DataView dataView;
+    MapView mapView;
+    VBox root;
+
+
     final CategoryAxis xAxis = new CategoryAxis();
     final NumberAxis yAxis = new NumberAxis();
-
-
     private List<BarChart<String, Number>> charts = new ArrayList<BarChart<String, Number>>();
-
-
     private GridPane view ;
 
     public DashboardView(){
+    }
 
+    public void setHeaderView(HeaderView headerView){
+        this.headerView = headerView;
+    }
+
+    public HeaderView getHeaderView(){
+        return headerView;
     }
 
 
@@ -38,20 +46,18 @@ public class DashboardView {
         this.mapView = mapView;
     }
 
-
     public MapView getMapView() {
         return mapView;
     }
 
 
-    public DataView getDataView(){
-        return dataView;
+    public void setDataView(DataView dataView){
+        this.dataView = dataView;
     }
 
-    HeaderBar headerView;
-    DataView dataView;
-    MapView mapView;
-    VBox root;
+    public DataView getDataView() {
+        return dataView;
+    }
 
 
     public Parent asParent() {
@@ -101,10 +107,4 @@ public class DashboardView {
 
         return root;
     }
-
-
-
-
-
-
 }
