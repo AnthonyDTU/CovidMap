@@ -1,24 +1,28 @@
 package Dashboard.View.Components;
 
 import javafx.scene.chart.Chart;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
-
 import java.util.HashMap;
 import java.util.List;
 
 public class DataView {
     VBox mainLayout;
+    ScrollPane KPIArea;
+    ScrollPane chartsArea;
     List<String> chartsKeys;
     HashMap<String, Chart> charts;
-    List<String> kpiFieldKeys;
-    HashMap<String, KPIField> kpiFields;
+    List<String> KPIFieldKeys;
+    HashMap<String, KPIField> KPIFields;
 
-    public DataView(VBox mainLayout, List<String> chartsKeys, HashMap<String, Chart> charts, List<String> kpiFieldKeys, HashMap<String, KPIField> kpiFields){
+    public DataView(VBox mainLayout, ScrollPane KPIArea, ScrollPane chartsArea, List<String> chartsKeys, HashMap<String, Chart> charts, List<String> KPIFieldKeys, HashMap<String, KPIField> KPIFields){
         this.mainLayout = mainLayout;
+        this.KPIArea = KPIArea;
+        this.chartsArea = chartsArea;
         this.chartsKeys = chartsKeys;
         this.charts = charts;
-        this.kpiFieldKeys = kpiFieldKeys;
-        this.kpiFields = kpiFields;
+        this.KPIFieldKeys = KPIFieldKeys;
+        this.KPIFields = KPIFields;
     }
 
     public VBox getMainLayout(){
@@ -33,18 +37,18 @@ public class DataView {
         return charts;
     }
 
-    public List<String> getKpiFieldKeys(){
-        return kpiFieldKeys;
+    public List<String> getKPIFieldKeys(){
+        return KPIFieldKeys;
     }
 
-    public HashMap<String, KPIField> getKpiFields(){
-        return kpiFields;
+    public HashMap<String, KPIField> getKPIFields(){
+        return KPIFields;
     }
 
     public void updateDataField(String key, String title, String value){
 
-        kpiFields.get(key).setTitle(title);
-        kpiFields.get(key).setValue(value);
+        KPIFields.get(key).setPrimaryTitle(title);
+        KPIFields.get(key).setPrimaryValue(value);
     }
 }
 

@@ -23,7 +23,6 @@ public class DashboardController {
 
     private DashboardModel model;
     private DashboardView view;
-    private String folderPath;
 
     private String line = "";
     private final String splitBy = ";";
@@ -135,6 +134,16 @@ public class DashboardController {
         for (String key : KPIFieldKeys )
         {
             view.getMapView().setKPIFieldValue(key, regionSummary.getData().get(senderID).get(key).toString());
+        }
+    }
+
+    // Something needs to call this (dropdown selector maybe?)
+    class UpdateDataFieldKPIs implements EventHandler<ActionEvent>{
+
+        @Override
+        public void handle(ActionEvent actionEvent){
+
+
         }
     }
 }

@@ -7,17 +7,17 @@ import Dashboard.View.Components.HeaderView;
 import Dashboard.View.Components.MapView;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.layout.*;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DashboardView {
-
-    DashboardController controller;
-    DashboardModel model;
 
     HeaderView headerView;
     DataView dataView;
@@ -25,18 +25,12 @@ public class DashboardView {
     VBox root;
 
 
-    final CategoryAxis xAxis = new CategoryAxis();
-    final NumberAxis yAxis = new NumberAxis();
-    private List<BarChart<String, Number>> charts = new ArrayList<BarChart<String, Number>>();
-    private GridPane view ;
-
     public DashboardView(){
     }
 
     public void setHeaderView(HeaderView headerView){
         this.headerView = headerView;
     }
-
     public HeaderView getHeaderView(){
         return headerView;
     }
@@ -45,7 +39,6 @@ public class DashboardView {
     public void setMapView(MapView mapView){
         this.mapView = mapView;
     }
-
     public MapView getMapView() {
         return mapView;
     }
@@ -54,7 +47,6 @@ public class DashboardView {
     public void setDataView(DataView dataView){
         this.dataView = dataView;
     }
-
     public DataView getDataView() {
         return dataView;
     }
@@ -62,31 +54,17 @@ public class DashboardView {
 
     public Parent asParent() {
 
-        //HeaderBarInitializer headerBarInitializer = new HeaderBarInitializer();
-        //DataViewInitializer dataViewInitializer = new DataViewInitializer();
+        root = CreateCompleteUI(dataView, mapView);
 
-
-        //headerView = headerBarInitializer.CreateHeaderBar();
-        //dataView = dataViewInitializer.CreateDataView();
-
-        // StackPane holder = new StackPane();
-        // Canvas canvas = new Canvas(1600,  900);
-        // holder.getChildren().add(canvas);
-        // root.getChildren().add(holder);
-        root = mapView.getMainLayout();
-
-        //Button button = new Button("Press");
-
-        //root.getChildren().add(button);
         root.setAlignment(Pos.CENTER);
-        root.setLayoutY(300);
 
+        root.setStyle("-fx-background-color: white;");
 
-        return root ;
+        return root;
     }
 
 
-    private VBox CreateCompleteUI(MapView mapView)
+    private VBox CreateCompleteUI(DataView dataView, MapView mapView)
     {
         GridPane mainGridPane = new GridPane();
 
@@ -96,12 +74,14 @@ public class DashboardView {
         column2.setPercentWidth(60);
         mainGridPane.getColumnConstraints().addAll(column1, column2);
 
-        //mainGridPane.add(dataView.getMainLayout(), 0, 0);
-        mainGridPane.add(mapView.getMainLayout(), 0, 0);
-        mainGridPane.getChildren().add(mapView.getMainLayout());
+
+        GridPane.setConstraints(dataView.getMainLayout(),0,0);
+        GridPane.setConstraints(mapView.getMainLayout(), 1, 0);
+        mainGridPane.getChildren().addAll(dataView.getMainLayout(), mapView.getMainLayout());
+        mainGridPane.setAlignment(Pos.CENTER);
 
         VBox root = new VBox(10);
-        root.setAlignment(Pos.CENTER);
+        root.setAlignment(Pos.TOP_CENTER);
         root.getChildren().addAll(mainGridPane);
         root.setBackground(Background.EMPTY);
 

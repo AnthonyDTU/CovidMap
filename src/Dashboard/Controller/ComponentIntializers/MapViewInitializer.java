@@ -4,6 +4,7 @@ import Dashboard.Model.DashboardModel;
 import Dashboard.Model.DataFile;
 import Dashboard.View.Components.KPIField;
 import Dashboard.View.Components.MapView;
+
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -21,31 +22,34 @@ import java.util.List;
 public class MapViewInitializer {
 
     MapView mapView;
-    VBox layout = new VBox(10);
-    List<String> buttonKeys = new ArrayList<>();
+    VBox mainLayout = new VBox(10);
+    List<String> regionButtonKeys = new ArrayList<>();
     HashMap<String, Button> regionButtons = new HashMap<>();
     Label KPIHeaderLabel = new Label();
     ImageView mapImageView = new ImageView();
     List<String> KPIFieldKeys = new ArrayList<>();
     HashMap<String, KPIField> KPIFields = new HashMap<>();
 
+    private final int mainLayoutWidth = 800;
+    private final int mapHeight = 750;
+    private final int headerHeight = 100;
+
 
     public MapViewInitializer(){
-        mapView = new MapView(layout, mapImageView, buttonKeys, regionButtons, KPIHeaderLabel, KPIFieldKeys, KPIFields);
+        mapView = new MapView(mainLayout, mapImageView, regionButtonKeys, regionButtons, KPIHeaderLabel, KPIFieldKeys, KPIFields);
     }
 
 
     public MapView CreateMapView() {
 
         HBox mapHeader = CreateMapHeader();
-        mapHeader.setAlignment(Pos.CENTER);
+        mapHeader.setAlignment(Pos.TOP_CENTER);
 
         Pane mapPane = CreateMapPane();
 
-        layout.getChildren().addAll(mapHeader, mapPane);
-        layout.setAlignment(Pos.CENTER);
-        layout.setLayoutX(200);
-        layout.setLayoutY(200);
+        mainLayout.getChildren().addAll(mapHeader, mapPane);
+        mainLayout.setAlignment(Pos.CENTER);
+        mainLayout.setPrefWidth(mainLayoutWidth);
 
         return mapView;
     }
@@ -53,16 +57,17 @@ public class MapViewInitializer {
 
     private HBox CreateMapHeader(){
 
-        // Map Header
         GridPane KPIGrid = new GridPane();
 
         DashboardModel data = new DashboardModel();
         DataFile regionSummary = data.getRegionSummary();
 
         KPIGrid.getRowConstraints().addAll(createNewRow(40), createNewRow(60));
-        KPIGrid.setAlignment(Pos.CENTER);
+        KPIGrid.setAlignment(Pos.TOP_CENTER);
+        KPIGrid.setPrefWidth(mainLayoutWidth);
 
         KPIHeaderLabel.setText(regionSummary.getLineKeys().get(regionSummary.getLineKeys().size() - 1));
+
         GridPane.setConstraints(KPIHeaderLabel, 0, 0);
         KPIGrid.getChildren().add(KPIHeaderLabel);
 
@@ -78,7 +83,10 @@ public class MapViewInitializer {
         }
 
         HBox mapHeader = new HBox();
-        mapHeader.setMinHeight(75);
+        mapHeader.setMinHeight(headerHeight);
+        mapHeader.setMinWidth(mainLayoutWidth);
+        mapHeader.setMaxWidth(mainLayoutWidth);
+        //mapHeader.setAlignment(Pos.CENTER);
         mapHeader.setAlignment(Pos.CENTER);
         mapHeader.getChildren().add(KPIGrid);
 
@@ -86,9 +94,9 @@ public class MapViewInitializer {
     }
 
 
-    private ColumnConstraints createNewColumn(int percentWidht){
+    private ColumnConstraints createNewColumn(int percentWidth){
         ColumnConstraints column = new ColumnConstraints();
-        column.setPercentWidth(percentWidht);
+        column.setPercentWidth(percentWidth);
         return column;
     }
 
@@ -101,7 +109,6 @@ public class MapViewInitializer {
 
     private Pane CreateMapPane()
     {
-        Pane mapPane = new Pane();
         DashboardModel data = new DashboardModel();
         DataFile regionSummary = data.getRegionSummary();
 
@@ -109,7 +116,7 @@ public class MapViewInitializer {
         {
             mapImageView.setImage(new Image(new FileInputStream("Regionskort.jpg")));
             mapImageView.setPreserveRatio(true);
-            mapImageView.setFitHeight(750);
+            mapImageView.setFitWidth(mainLayoutWidth);
             mapImageView.setId(regionSummary.getLineKeys().get(regionSummary.getLineKeys().size() - 1));
         }
         catch (FileNotFoundException e)
@@ -117,13 +124,15 @@ public class MapViewInitializer {
             // MessageBox
         }
 
-        mapPane.setPrefHeight(750);
+        Pane mapPane = new Pane();
         mapPane.getChildren().add(mapImageView);
+        mapPane.setMaxWidth(mainLayoutWidth);
+        mapPane.setMinWidth(mainLayoutWidth);
 
         for (int i = 0; i < regionSummary.getLineKeys().size() - 1; i++)
         {
             Button regionButton = createRegionButton(regionSummary.getLineKeys().get(i));
-            buttonKeys.add(regionSummary.getLineKeys().get(i));
+            regionButtonKeys.add(regionSummary.getLineKeys().get(i));
             regionButtons.put(regionSummary.getLineKeys().get(i), regionButton);
             mapPane.getChildren().add(regionButton);
         }

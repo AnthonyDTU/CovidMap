@@ -20,6 +20,7 @@ public class MapView {
     List<String> KPIFieldKeys;
     HashMap<String, KPIField> KPIFields;
 
+
     public MapView(VBox mainLayout, ImageView imageView, List<String> regionButtonKeys, HashMap<String, Button> regionButtons, Label KPIHeaderLabel, List<String> KPIFieldKeys, HashMap<String, KPIField> KPIFields){
         this.mainLayout = mainLayout;
         this.imageView = imageView;
@@ -59,7 +60,7 @@ public class MapView {
     }
 
     public void setKPIFieldValue(String key, String text){
-        KPIFields.get(key).setValue(text);
+        KPIFields.get(key).setPrimaryValue(text);
     }
 
     public void setKPIHeaderLabel(String text){
