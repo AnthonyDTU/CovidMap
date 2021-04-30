@@ -131,7 +131,10 @@ public class MapViewInitializer {
 
         for (int i = 0; i < regionSummary.getLineKeys().size() - 1; i++)
         {
-            Button regionButton = createRegionButton(regionSummary.getLineKeys().get(i));
+            int totalPositive = regionSummary.getData().get(regionSummary.getLineKeys().get(regionSummary.getLineKeys().size() - 1)).get(regionSummary.getDataFieldKeys().get(1));
+            int regionPositive = regionSummary.getData().get(regionSummary.getLineKeys().get(i)).get(regionSummary.getDataFieldKeys().get(1));
+
+            Button regionButton = createRegionButton(regionSummary.getLineKeys().get(i), totalPositive, regionPositive);
             regionButtonKeys.add(regionSummary.getLineKeys().get(i));
             regionButtons.put(regionSummary.getLineKeys().get(i), regionButton);
             mapPane.getChildren().add(regionButton);
@@ -141,21 +144,48 @@ public class MapViewInitializer {
     }
 
 
-    private Button createRegionButton(String ButtonID){
-
+    private Button createRegionButton(String ButtonID, int totalPositive, int regionPositive)
+    {
         Button regionButton = new Button();
-
         regionButton.setId(ButtonID);
-        regionButton.setAlignment(Pos.CENTER);
-        regionButton.setLayoutX(100); // Coordinates needed.
-        regionButton.setLayoutY(100); // Coordinates needed.
-        regionButton.setShape(new Circle(20)); // Radius calculated based on cases in region
-        regionButton.setMinSize(2*20, 2*20); // Radius calculated based on cases in region
-        regionButton.setMaxSize(2*20, 2*20); // Radius calculated based on cases in region
-        regionButton.setOpacity(1); // Figure this out
-        regionButton.setStyle(new Color(100, 100, 100).toString()); // Find RGB values for color
 
+        regionButton.setAlignment(Pos.CENTER);
+        regionButton.setLayoutX(regionCoordinates.valueOf(ButtonID).getXCoordinate());
+        regionButton.setLayoutY(regionCoordinates.valueOf(ButtonID).getYCoordinate());
+
+        float radius = 15 + (((float)regionPositive / (float)totalPositive) * 100);
+
+        regionButton.setShape(new Circle(radius)); // Radius calculated based on cases in region
+        regionButton.setMinSize(2*radius, 2*radius);
+        regionButton.setMaxSize(2*radius, 2*radius);
+
+        regionButton.setOpacity(0.35);
+        regionButton.setStyle("-fx-background-color: #ff0000");
         return regionButton;
     }
 
+
+    enum regionCoordinates {
+        Nordjylland (335, 90),
+        Midtjylland (215, 320),
+        Syddanmark (190,550),
+        Sjælland (550,530),
+        Hovedstaden (605,390);
+
+        private int xCoordinate;
+        private int yCoordinate;
+
+        regionCoordinates(int xCoordinate, int yCoordinate) {
+            this.xCoordinate = xCoordinate;
+            this.yCoordinate = yCoordinate;
+        }
+
+        public int getXCoordinate() {
+            return xCoordinate;
+        }
+
+        public int getYCoordinate(){
+            return yCoordinate;
+        }
+    }
 }

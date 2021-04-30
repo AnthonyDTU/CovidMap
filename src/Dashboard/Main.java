@@ -19,7 +19,6 @@ public class Main extends Application {
         DashboardView view = new DashboardView();
         DashboardController controller = new DashboardController(model, view);
 
-
         Scene scene = new Scene(view.asParent(), 1600, 900);
         scene.setFill(Color.WHITE);
         primaryStage.setScene(scene);
