@@ -45,6 +45,14 @@ public class DataView {
         return KPIFields;
     }
 
+    public ScrollPane getKPIArea(){
+        return KPIArea;
+    }
+
+    public ScrollPane getChartsArea(){
+        return chartsArea;
+    }
+
     public void updateDataField(String key, String title, String value){
 
         KPIFields.get(key).setPrimaryTitle(title);

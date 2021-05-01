@@ -5,14 +5,17 @@ import Dashboard.Model.DataFile;
 import Dashboard.View.Components.DataView;
 import Dashboard.View.Components.KPIField;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.chart.Chart;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +27,7 @@ public class DataViewInitializer {
     DataView dataView;
     VBox mainLayout = new VBox(10);
     ScrollPane KPIArea = new ScrollPane();
+    HBox headerBar = new HBox(10);
     ScrollPane chartsArea = new ScrollPane();
     List<String> chartsKeys = new ArrayList<>();
     HashMap<String, Chart> charts = new HashMap<>();
@@ -31,6 +35,8 @@ public class DataViewInitializer {
     HashMap<String, KPIField> KPIFields = new HashMap<>();
 
     private final int mainLayoutWidth = 800;
+    private final int headerBarHeight = 100;
+    private final int comboBoxWidth = 250;
 
 
     public DataViewInitializer(){
@@ -38,65 +44,73 @@ public class DataViewInitializer {
     }
 
 
-    private ScrollPane CreateKPIFieldArea()
+    private HBox CreateHeaderBar()
     {
+        Label timePeriodLabel = new Label("Tidshorisont:");
+        GridPane.setConstraints(timePeriodLabel, 0,0);
 
-        ScrollPane KPIAreaScrollPane = new ScrollPane();
-        KPIAreaScrollPane.setPrefWidth(mainLayoutWidth);
-        return KPIAreaScrollPane;
-        //
-        //KPIArea.setPrefWidth(mainLayoutWidth);
-//
-        //Button button = new Button("press me");
-        //KPIArea.setContent(button);
-//
-        //VBox KPIVbox = new VBox(10);
-        //KPIVbox.getChildren().add(KPIArea);
-        //KPIVbox.setAlignment(Pos.CENTER);
-        //KPIVbox.setPrefWidth(mainLayoutWidth);
+        Label regionLabel = new Label("Region:");
+        GridPane.setConstraints(regionLabel,1,0);
 
+        ObservableList<String> timePeriodOptions =
+                FXCollections.observableArrayList(
+                        "Total",
+                        "30 Dage",
+                        "7 Dage"
+                );
 
+        ObservableList<String> regionOptions =
+                FXCollections.observableArrayList(
+                        "Danmark",
+                        "Nordjylland",
+                        "Midtjylland",
+                        "Syddanmark",
+                        "Sjælland",
+                        "Hovedstaden"
+                );
 
+        ComboBox timePeriodSelector = new ComboBox(timePeriodOptions);
+        timePeriodSelector.setPrefWidth(comboBoxWidth);
 
-        // DashboardModel data = new DashboardModel();
-        // DataFile testsOverTime = data.getTestsOverTimeData();
+        GridPane.setConstraints(timePeriodSelector,0,0);
+        GridPane.setValignment(timePeriodSelector, VPos.CENTER);
+        GridPane.setHalignment(timePeriodSelector, HPos.CENTER);
 
-        // for (String KPI : testsOverTime.getDataFieldKeys())
-        // {
-        //     KPIFieldKeys.add(KPI);
-        // }
+        ComboBox regionSelector = new ComboBox(regionOptions);
+        regionSelector.setPrefWidth(comboBoxWidth);
 
-        // KPIField kpiField = new KPIField();
+        GridPane.setConstraints(regionSelector,1,0);
+        GridPane.setValignment(regionSelector, VPos.CENTER);
+        GridPane.setHalignment(regionSelector, HPos.CENTER);
 
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.getColumnConstraints().addAll(createNewColumn(50), createNewColumn((50)));
+        grid.getChildren().addAll(timePeriodLabel, timePeriodSelector, regionLabel, regionSelector);
+        grid.setPrefWidth(mainLayoutWidth);
+        grid.setPrefHeight(headerBarHeight);
 
+        HBox headerBar = new HBox(10);
+        headerBar.setPrefHeight(headerBarHeight);
+        headerBar.getChildren().addAll(grid);
 
+        return headerBar;
     }
 
-    private ScrollPane CreateChartsArea()
+    private ScrollPane CreateScrollPane()
     {
-        ScrollPane chartsScrollPane = new ScrollPane();
-        chartsScrollPane.setPrefWidth(mainLayoutWidth);
-        return chartsScrollPane;
+        ScrollPane areaScrollPane = new ScrollPane();
+        areaScrollPane.setPrefWidth(mainLayoutWidth);
+        areaScrollPane.setPannable(true);
+        return areaScrollPane;
     }
 
     public DataView CreateDataView()
     {
+        headerBar = CreateHeaderBar();
+        chartsArea = CreateScrollPane();
 
-        KPIArea = CreateKPIFieldArea();
-        chartsArea = CreateChartsArea();
-        GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
-        grid.getRowConstraints().addAll(createNewRow(50), createNewRow(50));
-        GridPane.setConstraints(KPIArea, 0,0);
-        GridPane.setConstraints(chartsArea, 0, 1);
-
-        grid.getChildren().addAll(KPIArea, chartsArea);
-        grid.setPrefHeight(900);
-
-        mainLayout.getChildren().addAll(grid);
-
-
-
+        mainLayout.getChildren().addAll(headerBar, chartsArea);
 
         return dataView;
 

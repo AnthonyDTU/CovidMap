@@ -5,6 +5,7 @@ import Dashboard.Controller.ComponentIntializers.HeaderViewInitializer;
 import Dashboard.Model.DataFile;
 import Dashboard.Model.DashboardModel;
 import Dashboard.Controller.ComponentIntializers.MapViewInitializer;
+import Dashboard.View.Components.KPIField;
 import Dashboard.View.DashboardView;
 import javafx.scene.control.Button;
 import javafx.event.EventHandler;
@@ -143,7 +144,54 @@ public class DashboardController {
         @Override
         public void handle(ActionEvent actionEvent){
 
+            DashboardModel data = new DashboardModel();
+            DataFile dataFile;
+
+
+            String File = "";
+
+            view.getDataView().getKPIFields().clear();
+
+            if (File == "Tested Over Time"){
+                dataFile = data.getTestsOverTimeData();
+            }
+            else {
+                dataFile = data.getDeathsOverTimeData();
+            }
+
+            for (String KPI : dataFile.getDataFieldKeys())
+            {
+                KPIField kpiField = new KPIField();
+
+
+            }
+
+             KPIField kpiField = new KPIField();
+        }
+
+
+        enum KPIConfigurations{
+            TestsOverTime (2),
+            TestByRegionOverTime (1),
+            DeathsOverTIme (1),
+            NewlyAdmittedOverTime (1);
+
+
+
+
+            private int numberOfKPIs;
+
+            KPIConfigurations(int numberOfKPIs){
+                this.numberOfKPIs = numberOfKPIs;
+            }
+
+            public int getNumberOfKPIs(){
+                return numberOfKPIs;
+            }
 
         }
     }
+
+
+
 }
