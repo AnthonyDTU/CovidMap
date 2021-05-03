@@ -5,13 +5,18 @@ import Dashboard.Model.DataFile;
 import Dashboard.View.Components.KPIField;
 import Dashboard.View.Components.MapView;
 
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+
 import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -42,7 +47,7 @@ public class MapViewInitializer {
 
     public MapView CreateMapView() {
 
-        HBox mapHeader = CreateMapHeader();
+        VBox mapHeader = CreateMapHeader();
         mapHeader.setAlignment(Pos.TOP_CENTER);
 
         Pane mapPane = CreateMapPane();
@@ -55,7 +60,7 @@ public class MapViewInitializer {
     }
 
 
-    private HBox CreateMapHeader(){
+    private VBox CreateMapHeader(){
 
         GridPane KPIGrid = new GridPane();
 
@@ -67,9 +72,8 @@ public class MapViewInitializer {
         KPIGrid.setPrefWidth(mainLayoutWidth);
 
         KPIHeaderLabel.setText(regionSummary.getLineKeys().get(regionSummary.getLineKeys().size() - 1));
-
-        GridPane.setConstraints(KPIHeaderLabel, 0, 0);
-        KPIGrid.getChildren().add(KPIHeaderLabel);
+        KPIHeaderLabel.setFont(Font.font("Arial", FontWeight.BOLD, 28));
+        KPIHeaderLabel.setAlignment(Pos.CENTER);
 
         int i = 0;
         for (String KPI : regionSummary.getDataFieldKeys())
@@ -82,13 +86,13 @@ public class MapViewInitializer {
             KPIGrid.getChildren().add(KPIFields.get(KPI).getLayout());
         }
 
-        HBox mapHeader = new HBox();
+        VBox mapHeader = new VBox();
         mapHeader.setMinHeight(headerHeight);
         mapHeader.setMinWidth(mainLayoutWidth);
         mapHeader.setMaxWidth(mainLayoutWidth);
         //mapHeader.setAlignment(Pos.CENTER);
         mapHeader.setAlignment(Pos.CENTER);
-        mapHeader.getChildren().add(KPIGrid);
+        mapHeader.getChildren().addAll(KPIHeaderLabel, KPIGrid);
 
         return mapHeader;
     }

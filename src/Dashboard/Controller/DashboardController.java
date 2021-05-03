@@ -1,5 +1,7 @@
 package Dashboard.Controller;
 
+
+
 import Dashboard.Controller.ComponentIntializers.DataViewInitializer;
 import Dashboard.Controller.ComponentIntializers.HeaderViewInitializer;
 import Dashboard.Model.DataFile;
@@ -74,12 +76,13 @@ public class DashboardController {
             // Tutorial for reading file found at https://www.javatpoint.com/java-string-to-int, but adapted a lot
             // parsing a CSV file into BufferedReader class constructor
             BufferedReader bufferedReader = new BufferedReader(new FileReader(folderPath + fileName));
-            List<String> lineKeys = new ArrayList<>();
-            HashMap<String, HashMap<String, Integer>> hashMaps = new HashMap<>();
 
             String[] data = bufferedReader.readLine().split(splitBy);
             List<String> dataFieldKeys = new ArrayList<>(Arrays.asList(data));
             dataFieldKeys.remove(0);
+
+            List<String> lineKeys = new ArrayList<>();
+            HashMap<String, HashMap<String, Integer>> hashMaps = new HashMap<>();
 
             while ((line = bufferedReader.readLine()) != null)
             {
@@ -137,61 +140,5 @@ public class DashboardController {
             view.getMapView().setKPIFieldValue(key, regionSummary.getData().get(senderID).get(key).toString());
         }
     }
-
-    // Something needs to call this (dropdown selector maybe?)
-    class UpdateDataFieldKPIs implements EventHandler<ActionEvent>{
-
-        @Override
-        public void handle(ActionEvent actionEvent){
-
-            DashboardModel data = new DashboardModel();
-            DataFile dataFile;
-
-
-            String File = "";
-
-            view.getDataView().getKPIFields().clear();
-
-            if (File == "Tested Over Time"){
-                dataFile = data.getTestsOverTimeData();
-            }
-            else {
-                dataFile = data.getDeathsOverTimeData();
-            }
-
-            for (String KPI : dataFile.getDataFieldKeys())
-            {
-                KPIField kpiField = new KPIField();
-
-
-            }
-
-             KPIField kpiField = new KPIField();
-        }
-
-
-        enum KPIConfigurations{
-            TestsOverTime (2),
-            TestByRegionOverTime (1),
-            DeathsOverTIme (1),
-            NewlyAdmittedOverTime (1);
-
-
-
-
-            private int numberOfKPIs;
-
-            KPIConfigurations(int numberOfKPIs){
-                this.numberOfKPIs = numberOfKPIs;
-            }
-
-            public int getNumberOfKPIs(){
-                return numberOfKPIs;
-            }
-
-        }
-    }
-
-
 
 }

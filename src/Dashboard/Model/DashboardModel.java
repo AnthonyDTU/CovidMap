@@ -1,5 +1,9 @@
 package Dashboard.Model;
 
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class DashboardModel extends DataFile{
 
     private String folderPath;
@@ -20,6 +24,8 @@ public class DashboardModel extends DataFile{
     private static DataFile casesByAge = new DataFile();
     private static DataFile casesBySex = new DataFile();
 
+    private static List<String> loadedFiles = new ArrayList<>();
+
     // After public DataBase(String folderPath) has been called once, this initializes the object, with previously loaded data
     public DashboardModel(){
     }
@@ -30,64 +36,40 @@ public class DashboardModel extends DataFile{
     }
 
 
-    public final void setFolderPath(String folderPath){
-        this.folderPath = folderPath;
-    }
-    public String getFolderPath(){
-        return folderPath;
-    }
+    public final void setFolderPath(String folderPath) { this.folderPath = folderPath; }
+    public String getFolderPath() { return folderPath; }
 
 
-    public final void setTestsOverTimeData(DataFile testsOverTime){
-        this.testsOverTime = testsOverTime;
-    }
-    public DataFile getTestsOverTimeData(){
-        return testsOverTime;
-    }
+    public final void setTestsOverTimeData(DataFile testsOverTime) { this.testsOverTime = testsOverTime; }
+    public DataFile getTestsOverTimeData() { return testsOverTime; }
 
 
-    public final void setTestsByRegionsOverTimeData(DataFile testsByRegionsOverTime) {
-        this.testsByRegionsOverTime = testsByRegionsOverTime;
-    }
+    public final void setTestsByRegionsOverTimeData(DataFile testsByRegionsOverTime) { this.testsByRegionsOverTime = testsByRegionsOverTime; }
     public DataFile getTestsByRegionsOverTimeData() { return testsByRegionsOverTime; }
 
 
-    public final void setDeathsOverTimeData(DataFile deathsOverTime){
-        this.deathsOverTime = deathsOverTime;
-    }
-    public DataFile getDeathsOverTimeData(){
-        return deathsOverTime;
-    }
+    public final void setDeathsOverTimeData(DataFile deathsOverTime) { this.deathsOverTime = deathsOverTime; }
+    public DataFile getDeathsOverTimeData() { return deathsOverTime; }
 
 
-    public final void setNewlyAdmittedOverTimeData(DataFile newlyAdmittedOverTime) {
-        this.newlyAdmittedOverTime = newlyAdmittedOverTime;
-    }
-    public DataFile getNewlyAdmittedOverTimeData(){
-        return newlyAdmittedOverTime;
-    }
+    public final void setNewlyAdmittedOverTimeData(DataFile newlyAdmittedOverTime) { this.newlyAdmittedOverTime = newlyAdmittedOverTime; }
+    public DataFile getNewlyAdmittedOverTimeData() { return newlyAdmittedOverTime; }
 
 
-    public final void setRegionSummaryData(DataFile regionSummary) {
-        this.regionSummary = regionSummary;
-    }
-    public DataFile getRegionSummary() {
-        return regionSummary;
-    }
+    public final void setRegionSummaryData(DataFile regionSummary) {this.regionSummary = regionSummary; }
+    public DataFile getRegionSummary() { return regionSummary; }
 
 
-    public final void setCasesByAgeData(DataFile casesByAge){
-        this.casesByAge = casesByAge;
-    }
-    public DataFile getCasesByAgeData(){
-        return casesByAge;
-    }
+    public final void setCasesByAgeData(DataFile casesByAge) { this.casesByAge = casesByAge; }
+    public DataFile getCasesByAgeData() { return casesByAge; }
 
 
-    public final void setCasesBySexData(DataFile casesBySex){
-        this.casesBySex = casesBySex;
-    }
-    public DataFile getCasesBySexData(){
-        return casesBySex;
-    }
+    public final void setCasesBySexData(DataFile casesBySex) { this.casesBySex = casesBySex; }
+    public DataFile getCasesBySexData() { return casesBySex; }
+
+
+    public final void addFileToList(String fileName) { loadedFiles.add(fileName); }
+    public final void clearLoadedFiles() { loadedFiles.clear(); }
+    public List<String> getLoadedFiles() { return loadedFiles; }
+
 }
