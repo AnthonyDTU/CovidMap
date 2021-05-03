@@ -1,7 +1,5 @@
 package Dashboard.Controller;
 
-
-
 import Dashboard.Controller.ComponentIntializers.DataViewInitializer;
 import Dashboard.Controller.ComponentIntializers.HeaderViewInitializer;
 import Dashboard.Model.DataFile;
@@ -21,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+
+
 
 public class DashboardController {
 

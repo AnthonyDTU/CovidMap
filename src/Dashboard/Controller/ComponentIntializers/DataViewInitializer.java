@@ -5,12 +5,17 @@ import Dashboard.Model.DataFile;
 import Dashboard.View.Components.DataView;
 import Dashboard.View.Components.KPIField;
 
+import com.github.kilianB.MultiTypeChart;
+import com.github.kilianB.TypedSeries;
+import com.github.kilianB.ValueMarker;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.geometry.VPos;
 import javafx.scene.chart.Chart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -18,6 +23,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+
+
+import javafx.scene.paint.Color;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -112,7 +121,39 @@ public class DataViewInitializer {
         areaScrollPane.setPrefWidth(mainLayoutWidth);
         areaScrollPane.setPannable(true);
 
+//Create a chart
 
+
+        MultiTypeChart<Number, Number> multiTypeChart= new MultiTypeChart<>(new NumberAxis(), new NumberAxis());
+
+//Builder pattern
+        TypedSeries lineSeries = TypedSeries.builder("Line").line().build();
+        TypedSeries areaSeries = TypedSeries.builder("Area").area().build();
+        TypedSeries scatterSeries = TypedSeries.builder("Scatter").scatter().build();
+
+//Advanced control with full generics
+        TypedSeries<Number,Number> lineSeries1 = TypedSeries.<Number,Number>
+                builder("Line Series 1").line()
+                .withYAxisIndex(1)
+                .withYAxisSide(Side.RIGHT)
+                .build();
+
+//Add/remove value markers
+        boolean showLabel = true;
+        multiTypeChart.addValueMarker(new ValueMarker<Number>(5,true,Color.BLUE,showLabel));
+        multiTypeChart.addValueMarker(new ValueMarker<Number>(12,false,Color.BLACK,showLabel));
+        multiTypeChart.addValueMarker(new ValueMarker<Number>(20,false,Color.GREEN,showLabel));
+
+//add series
+        multiTypeChart.addSeries(scatterSeries);
+        multiTypeChart.addSeries(areaSeries);
+        multiTypeChart.addSeries(lineSeries);
+
+//customize color if desired
+        multiTypeChart.setSeriesColor(1, 90);
+        multiTypeChart.setSeriesColor(2, 50);
+
+        areaScrollPane.setContent(multiTypeChart);
 
 
         return areaScrollPane;

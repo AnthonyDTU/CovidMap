@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CovidMap.iml" filepath="$PROJECT_DIR$/CovidMap.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../JavaFXMultiChart-master/MultiTypeChart.iml" filepath="$PROJECT_DIR$/../JavaFXMultiChart-master/MultiTypeChart.iml" />
     </modules>
   </component>
 </project>
