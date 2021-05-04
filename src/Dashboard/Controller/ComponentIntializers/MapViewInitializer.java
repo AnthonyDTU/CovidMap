@@ -55,6 +55,7 @@ public class MapViewInitializer {
         mainLayout.getChildren().addAll(mapHeader, mapPane);
         mainLayout.setAlignment(Pos.CENTER);
         mainLayout.setPrefWidth(mainLayoutWidth);
+        //mainLayout.setMaxWidth(mainLayoutWidth);
 
         return mapView;
     }
@@ -131,7 +132,7 @@ public class MapViewInitializer {
         Pane mapPane = new Pane();
         mapPane.getChildren().add(mapImageView);
         mapPane.setMaxWidth(mainLayoutWidth);
-        mapPane.setMinWidth(mainLayoutWidth);
+        //mapPane.setMinWidth(mainLayoutWidth);
 
         for (int i = 0; i < regionSummary.getLineKeys().size() - 1; i++)
         {

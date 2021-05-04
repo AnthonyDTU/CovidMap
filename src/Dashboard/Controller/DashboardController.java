@@ -49,7 +49,7 @@ public class DashboardController {
         this.model.setNewlyAdmittedOverTimeData(LoadFile(model.getFolderPath(), newlyAdmittedOverTimeFilename));
         this.model.setRegionSummaryData(LoadFile(model.getFolderPath(), regionSummaryFilename));
         this.model.setCasesByAgeData(LoadFile(model.getFolderPath(), casesByAgeFilename));
-        //model.setCasesBySexData(LoadFile(model.getFolderPath(), casesBySexFilename));
+        model.setCasesBySexData(LoadFile(model.getFolderPath(), casesBySexFilename));
 
         // Intialize the View
         // Header Bar:
@@ -86,10 +86,19 @@ public class DashboardController {
 
             while ((line = bufferedReader.readLine()) != null)
             {
+
+
+
                 data = line.replace(".", "").replace(",",".").split(splitBy);
+
                 HashMap<String, Integer> dataHashMap = new HashMap<>();
 
                 for (int i = 1; i < data.length; i++){
+
+                    if (data[i].indexOf("(") != -1){
+                        int index = data[i].indexOf("(");
+                        data[i] = data[i].substring(0, index);
+                    }
                     dataHashMap.put(dataFieldKeys.get(i - 1), (int)Float.parseFloat(data[i].strip()));
                 }
 

@@ -9,6 +9,8 @@ public class DataFile {
     private String fileName;
     private List<String> dataFieldKeys = new ArrayList<>();
     private List<String> lineKeys = new ArrayList<>();
+
+    // Order of retrieval: Linekey, Datakey
     private HashMap<String, HashMap<String, Integer>> data = new HashMap<>();
 
     public DataFile() { }
