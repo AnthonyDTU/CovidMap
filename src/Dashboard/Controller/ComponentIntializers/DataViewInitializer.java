@@ -8,6 +8,7 @@ import Dashboard.View.Components.KPIField;
 import com.github.kilianB.MultiTypeChart;
 import com.github.kilianB.TypedSeries;
 import com.github.kilianB.ValueMarker;
+import javafx.beans.property.BooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.*;
@@ -22,6 +23,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.paint.Color;
 
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -153,77 +155,40 @@ public class DataViewInitializer {
         mainLayout.setPrefWidth(mainLayoutWidth);
 
         return dataView;
-
     }
 
     private Chart createTimeChart(ChartCategory chartCategory){
 
-        DashboardModel data = new DashboardModel();
-
-        MultiTypeChart<String, Number> multiTypeChart= new MultiTypeChart<>(new CategoryAxis(), new NumberAxis());
-
-        TypedSeries<String,Number> daylySeries = TypedSeries.<String,Number>
-                builder("Positive").area()
+        TypedSeries<String,Number> cumulativeSeries = TypedSeries.<String,Number>
+                builder(chartCategory.getLegendTwoTitle()).area()
                 .withYAxisIndex(0)
                 .withYAxisSide(Side.LEFT)
                 .build();
 
-        TypedSeries<String,Number> kumulativSeries = TypedSeries.<String,Number>
-                builder("Kumulativ").area()
-                .withYAxisIndex(2)
+        TypedSeries<String,Number> dailySeries = TypedSeries.<String,Number>
+                builder(chartCategory.getLegendOneTitle()).area()
+                .withYAxisIndex(1)
                 .withYAxisSide(Side.RIGHT)
                 .build();
 
-        DataFile dataFile;
 
+        DataFile dataFile = chartCategory.getDataFile();
 
-        int kumulative = 0;
-        int dataFieldIndex = 0;
-
-        if (chartCategory == ChartCategory.Positive)
-        {
-            dataFile = data.getTestsOverTimeData();
-            dataFieldIndex = dataFile.getDataFieldKeys().indexOf("NewPositive");
-        }
-        else if (chartCategory == ChartCategory.Tested)
-        {
-            dataFile = data.getTestsOverTimeData();
-            dataFieldIndex = dataFile.getDataFieldKeys().indexOf("Tested");
-        }
-        else if (chartCategory == ChartCategory.Admitted)
-        {
-            dataFile = data.getNewlyAdmittedOverTimeData();
-            dataFieldIndex = dataFile.getDataFieldKeys().indexOf("Total");
-        }
-        else
-        {
-            dataFile = data.getDeathsOverTimeData();
-            dataFieldIndex = dataFile.getDataFieldKeys().indexOf("Antal_døde");
-        }
-
-        for (int i = 0; i < dataFile.getLineKeys().size() - 2; i++){ // Dont read last line
+        for (int i = 0; i < dataFile.getLineKeys().size() - chartCategory.getNumberOfTotalLines(); i++){ // Dont read last line
 
             String lineKey = dataFile.getLineKeys().get(i);
-            kumulative += dataFile.getData().get(lineKey).get(dataFile.getDataFieldKeys().get(dataFieldIndex));
+            chartCategory.addToCumulativeValue(dataFile.getData().get(lineKey).get(dataFile.getDataFieldKeys().get(chartCategory.getIndexOfData())));
 
-            daylySeries.addData(lineKey, dataFile.getData().get(lineKey).get(dataFile.getDataFieldKeys().get(dataFieldIndex)));
-
-            if (chartCategory == ChartCategory.Tested)
-                kumulativSeries.addData(lineKey, dataFile.getData().get(lineKey).get(dataFile.getDataFieldKeys().get(dataFieldIndex + 1)));
-            else
-                kumulativSeries.addData(lineKey, kumulative);
+            dailySeries.addData(lineKey, dataFile.getData().get(lineKey).get(dataFile.getDataFieldKeys().get(chartCategory.getIndexOfData())));
+            cumulativeSeries.addData(lineKey, chartCategory.getCumulativeValue());
         }
 
+        MultiTypeChart<String, Number> multiTypeChart= new MultiTypeChart<>(new CategoryAxis(), new NumberAxis());
 
-//
-////Add/remove value markers
-//        boolean showLabel = true;
-//        multiTypeChart.addValueMarker(new ValueMarker<Number>(5,true, Color.BLUE,showLabel));
-//        multiTypeChart.addValueMarker(new ValueMarker<Number>(12,false, Color.BLACK,showLabel));
-//        multiTypeChart.addValueMarker(new ValueMarker<Number>(20,false, Color.GREEN,showLabel));
+        multiTypeChart.setTitle(chartCategory.getTitle());
 
-        multiTypeChart.addSeries(kumulativSeries);
-        multiTypeChart.addSeries(daylySeries);
+        multiTypeChart.addSeries(cumulativeSeries);
+        multiTypeChart.addSeries(dailySeries);
 
         multiTypeChart.setSeriesColor(1, 90);
         multiTypeChart.setSeriesColor(2, 50);
@@ -283,14 +248,6 @@ public class DataViewInitializer {
     }
 
 
-    enum ChartCategory{
-        Positive,
-        Tested,
-        Admitted,
-        Deaths;
-    }
-
-
 
     private ColumnConstraints createNewColumn(int percentWidth){
         ColumnConstraints column = new ColumnConstraints();
@@ -303,30 +260,75 @@ public class DataViewInitializer {
         row.setPercentHeight(percentHeight);
         return row;
     }
-
-    private void CreateDataChart(){
-
-        List<String> chartTitles = new ArrayList<>();
-        chartTitles.add("Test Over Time");
-        chartTitles.add("Positive Over Time");
-        chartTitles.add("Deaths Over Time");
-        chartTitles.add("Newly Admitted Over Time");
-        chartTitles.add("Admitted Over Time");
-        chartTitles.add("Cases By Age");
-        chartTitles.add("Cases By Sex");
+}
 
 
-        for (String chartTitle : chartTitles) {
+enum ChartCategory{
+    Positive ("Positive Cases","Daily Positive","Total Positive",0,2,0, new DataFile()),
+    Tested ("Tested","Daily Tested","Total Tested",4,2,0, new DataFile()),
+    Admitted ("Admitted","Daily Admitted","Total Admitted",0,1,0, new DataFile()),
+    Deaths ("Deaths","Daily Deaths","Total Deaths",0,1,0, new DataFile());
 
-            chartsKeys.add(chartTitle);
+    private String title;
+    private String legendOneTitle;
+    private String legendTwoTitle;
+    private int indexOfData;
+    private int numberOfTotalLines;
+    private int cumulativeValue;
+    private DataFile dataFile;
 
+    ChartCategory(String title, String legendOneTitle, String legendTwoTitle, int indexOfData, int numberOfTotalLines, int cumalativeValue, DataFile dataFile){
+        this.title = title;
+        this.legendOneTitle = legendOneTitle;
+        this.legendTwoTitle = legendTwoTitle;
+        this.indexOfData = indexOfData;
+        this.numberOfTotalLines = numberOfTotalLines;
+        this.cumulativeValue = cumalativeValue;
+        this.dataFile = dataFile;
+    }
 
+    public String getTitle(){
+        return title;
+    }
+
+    public String getLegendOneTitle(){
+        return legendOneTitle;
+    }
+
+    public String getLegendTwoTitle(){
+        return legendTwoTitle;
+    }
+
+    public int getIndexOfData(){
+        return indexOfData;
+    }
+
+    public int getNumberOfTotalLines(){
+        return numberOfTotalLines;
+    }
+
+    public void addToCumulativeValue(int value){
+        cumulativeValue += value;
+    }
+
+    public int getCumulativeValue(){
+        return cumulativeValue;
+    }
+
+    public DataFile getDataFile(){
+
+        DashboardModel data = new DashboardModel();
+        if (this == Positive){
+            return data.getTestsOverTimeData();
         }
-
-
-
-
-
-
+        else if (this == Tested){
+            return data.getTestsOverTimeData();
+        }
+        else if (this == Admitted){
+            return data.getNewlyAdmittedOverTimeData();
+        }
+        else {
+            return data.getDeathsOverTimeData();
+        }
     }
 }
