@@ -1,4 +1,4 @@
-package Dashboard.View.Components;
+package Dashboard.Components;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -72,10 +72,10 @@ public class MapView {
     // Add Event Handlers
     // *****************************************************************************************************************
 
-    public void addEventHandlerToRegionButtons(EventHandler<ActionEvent> event)
+    public void addEventHandlerToRegionButtons(EventHandler<ActionEvent> eventHandler)
     {
         for (String buttonKey : regionButtonKeys) {
-            regionButtons.get(buttonKey).setOnAction(event);
+            regionButtons.get(buttonKey).setOnAction(eventHandler);
         }
     }
 

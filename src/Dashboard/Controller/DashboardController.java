@@ -1,17 +1,28 @@
 package Dashboard.Controller;
 
+import Dashboard.Components.ChartConfigurations;
 import Dashboard.Controller.ComponentIntializers.DataViewInitializer;
 import Dashboard.Controller.ComponentIntializers.HeaderViewInitializer;
 import Dashboard.Model.DataFile;
 import Dashboard.Model.DashboardModel;
 import Dashboard.Controller.ComponentIntializers.MapViewInitializer;
-import Dashboard.View.Components.KPIField;
 import Dashboard.View.DashboardView;
+import com.github.kilianB.MultiTypeChart;
+import com.github.kilianB.TypedSeries;
+import javafx.geometry.Side;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.Chart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Button;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -65,6 +76,7 @@ public class DashboardController {
         // Data View:
         DataViewInitializer dataViewInitializer = new DataViewInitializer();
         this.view.setDataView(dataViewInitializer.CreateDataView());
+        this.view.getDataView().addEventHandlerToComboBox(new FilterComboBoxesEventHandler());
 
 
     }
@@ -118,6 +130,19 @@ public class DashboardController {
     }
 
 
+    private void UpdateRegionKPIFields(String senderID)
+    {
+        DataFile regionSummary = model.getRegionSummary();
+        view.getMapView().setKPIHeaderLabel(senderID);
+
+        var KPIFieldKeys = view.getMapView().getKPIFieldKeys();
+        for (String key : KPIFieldKeys )
+        {
+            view.getMapView().setKPIFieldValue(key, regionSummary.getData().get(senderID).get(key).toString());
+        }
+    }
+
+
     class RegionButtonEventHandler implements EventHandler<ActionEvent> {
 
         @Override
@@ -138,16 +163,99 @@ public class DashboardController {
         }
     }
 
-    private void UpdateRegionKPIFields(String senderID)
-    {
-        DataFile regionSummary = model.getRegionSummary();
-        view.getMapView().setKPIHeaderLabel(senderID);
+    class FilterComboBoxesEventHandler implements EventHandler<ActionEvent>{
 
-        var KPIFieldKeys = view.getMapView().getKPIFieldKeys();
-        for (String key : KPIFieldKeys )
+        @Override
+        public void handle(ActionEvent actionEvent)
         {
-            view.getMapView().setKPIFieldValue(key, regionSummary.getData().get(senderID).get(key).toString());
+            VBox newChartsArea = new VBox(40);
+
+            for (int j = 0; j < 4; j++){
+
+                ChartConfigurations chartConfiguration = ChartConfigurations.values()[j];
+                chartConfiguration.resetCumulativeValue();
+
+                int startIndex = 0;
+                switch (view.getDataView().getTimePeriodSelected())
+                {
+                    case "All Time":
+
+                        break;
+
+                    case "30 Dage":
+                        startIndex = chartConfiguration.getDataFile().getLineKeys().size() - 30 - chartConfiguration.getNumberOfTotalLines();
+                        break;
+
+                    case "7 Dage":
+                        startIndex = chartConfiguration.getDataFile().getLineKeys().size() - 7 - chartConfiguration.getNumberOfTotalLines();
+                        break;
+                }
+
+                Chart multiTypeChart = createTimeChart(chartConfiguration, startIndex);
+                view.getDataView().getCharts().put(chartConfiguration, multiTypeChart);
+                newChartsArea.getChildren().add(multiTypeChart);
+
+            }
+
+
+            HBox pieCharts = new HBox(0);
+            pieCharts.getChildren().addAll(view.getDataView().getCharts().get(ChartConfigurations.ByAge), view.getDataView().getCharts().get(ChartConfigurations.BySex));
+            pieCharts.setMaxWidth(700);
+            newChartsArea.getChildren().add(pieCharts);
+
+            ScrollPane newChartsScrollPane = new ScrollPane();
+            newChartsScrollPane.setStyle("-fx-background: white;");
+            newChartsScrollPane.setPrefWidth(700);
+            newChartsScrollPane.setPannable(true);
+            newChartsScrollPane.setContent(newChartsArea);
+
+            view.getDataView().ReloadCharts(newChartsScrollPane);
         }
+
+
+        private Chart createTimeChart(ChartConfigurations chartConfiguration, int startIndex){
+
+            TypedSeries<String,Number> cumulativeSeries = TypedSeries.<String,Number>
+                    builder(chartConfiguration.getLegendTwoTitle()).area()
+                    .withYAxisIndex(0)
+                    .withYAxisSide(Side.LEFT)
+                    .build();
+
+            TypedSeries<String,Number> dailySeries = TypedSeries.<String,Number>
+                    builder(chartConfiguration.getLegendOneTitle()).area()
+                    .withYAxisIndex(1)
+                    .withYAxisSide(Side.RIGHT)
+                    .build();
+
+
+            DataFile dataFile = chartConfiguration.getDataFile();
+
+            for (int i = startIndex; i < dataFile.getLineKeys().size() - chartConfiguration.getNumberOfTotalLines(); i++){ // Dont read last line
+
+                String lineKey = dataFile.getLineKeys().get(i);
+                chartConfiguration.addToCumulativeValue(dataFile.getData().get(lineKey).get(dataFile.getDataFieldKeys().get(chartConfiguration.getIndexOfData())));
+
+                dailySeries.addData(lineKey, dataFile.getData().get(lineKey).get(dataFile.getDataFieldKeys().get(chartConfiguration.getIndexOfData())));
+                cumulativeSeries.addData(lineKey, chartConfiguration.getCumulativeValue());
+            }
+
+
+            MultiTypeChart<String, Number> multiTypeChart= new MultiTypeChart<>(new CategoryAxis(), new NumberAxis());
+
+            multiTypeChart.setTitle(chartConfiguration.getTitle());
+            multiTypeChart.setId(String.valueOf(chartConfiguration.getConfigurationIndex()));
+
+            multiTypeChart.addSeries(cumulativeSeries);
+            multiTypeChart.addSeries(dailySeries);
+
+            multiTypeChart.setSeriesColor(1, 90);
+            multiTypeChart.setSeriesColor(2, 50);
+
+            return multiTypeChart;
+        }
+
     }
+
+
 
 }

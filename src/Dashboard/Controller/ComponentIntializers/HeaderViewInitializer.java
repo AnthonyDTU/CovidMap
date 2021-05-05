@@ -1,6 +1,6 @@
 package Dashboard.Controller.ComponentIntializers;
 
-import Dashboard.View.Components.HeaderView;
+import Dashboard.Components.HeaderView;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;

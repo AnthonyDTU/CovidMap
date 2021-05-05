@@ -2,12 +2,10 @@ package Dashboard.Controller.ComponentIntializers;
 
 import Dashboard.Model.DashboardModel;
 import Dashboard.Model.DataFile;
-import Dashboard.View.Components.KPIField;
-import Dashboard.View.Components.MapView;
+import Dashboard.Components.KPIField;
+import Dashboard.Components.MapView;
 
-import javafx.geometry.HPos;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -17,7 +15,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;

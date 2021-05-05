@@ -1,21 +1,11 @@
 package Dashboard.View;
 
-import Dashboard.Controller.DashboardController;
-import Dashboard.Model.DashboardModel;
-import Dashboard.View.Components.DataView;
-import Dashboard.View.Components.HeaderView;
-import Dashboard.View.Components.MapView;
+import Dashboard.Components.DataView;
+import Dashboard.Components.HeaderView;
+import Dashboard.Components.MapView;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.layout.*;
-
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class DashboardView {
 

@@ -2,44 +2,34 @@ package Dashboard.Controller.ComponentIntializers;
 
 import Dashboard.Model.DashboardModel;
 import Dashboard.Model.DataFile;
-import Dashboard.View.Components.DataView;
-import Dashboard.View.Components.KPIField;
+import Dashboard.Components.ChartConfigurations;
+import Dashboard.Components.DataView;
 
 import com.github.kilianB.MultiTypeChart;
 import com.github.kilianB.TypedSeries;
-import com.github.kilianB.ValueMarker;
-import javafx.beans.property.BooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.*;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
 
-import javafx.scene.paint.Color;
-
-
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 public class DataViewInitializer {
 
     DataView dataView;
     VBox mainLayout = new VBox(10);
-    ScrollPane KPIArea = new ScrollPane();
     HBox headerBar = new HBox(10);
-    ScrollPane chartsArea = new ScrollPane();
-    List<String> chartsKeys = new ArrayList<>();
-    HashMap<String, Chart> charts = new HashMap<>();
-    List<String> KPIFieldKeys = new ArrayList<>();
-    HashMap<String, KPIField> KPIFields = new HashMap<>();
+    ComboBox timePeriodComboBox = new ComboBox();
+    ComboBox regionComboBox = new ComboBox();
+    VBox chartsArea = new VBox();
+    List<ChartConfigurations> chartsKeys = new ArrayList<>();
+    HashMap<ChartConfigurations, Chart> charts = new HashMap<>();
 
     private final int mainLayoutWidth = 700;
     private final int headerBarHeight = 150;
@@ -47,7 +37,7 @@ public class DataViewInitializer {
 
 
     public DataViewInitializer(){
-        dataView = new DataView(mainLayout, KPIArea, chartsArea, chartsKeys, charts, KPIFieldKeys, KPIFields);
+        dataView = new DataView(mainLayout, headerBar, timePeriodComboBox, regionComboBox, chartsArea, chartsKeys, charts);
     }
 
 
@@ -82,25 +72,27 @@ public class DataViewInitializer {
                         "Hovedstaden"
                 );
 
-        ComboBox timePeriodSelector = new ComboBox(timePeriodOptions);
-        timePeriodSelector.setPrefWidth(comboBoxWidth);
+        timePeriodComboBox.setItems(timePeriodOptions);
+        timePeriodComboBox.setValue(timePeriodOptions.get(0));
+        timePeriodComboBox.setPrefWidth(comboBoxWidth);
 
-        GridPane.setConstraints(timePeriodSelector,0,2);
-        GridPane.setValignment(timePeriodSelector, VPos.TOP);
-        GridPane.setHalignment(timePeriodSelector, HPos.CENTER);
+        GridPane.setConstraints(timePeriodComboBox,0,2);
+        GridPane.setValignment(timePeriodComboBox, VPos.TOP);
+        GridPane.setHalignment(timePeriodComboBox, HPos.CENTER);
 
-        ComboBox regionSelector = new ComboBox(regionOptions);
-        regionSelector.setPrefWidth(comboBoxWidth);
+        regionComboBox.setItems(regionOptions);
+        regionComboBox.setValue(regionOptions.get(0));
+        regionComboBox.setPrefWidth(comboBoxWidth);
 
-        GridPane.setConstraints(regionSelector,1,2);
-        GridPane.setValignment(regionSelector, VPos.TOP);
-        GridPane.setHalignment(regionSelector, HPos.CENTER);
+        GridPane.setConstraints(regionComboBox,1,2);
+        GridPane.setValignment(regionComboBox, VPos.TOP);
+        GridPane.setHalignment(regionComboBox, HPos.CENTER);
 
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.getColumnConstraints().addAll(createNewColumn(50), createNewColumn((50)));
         grid.getRowConstraints().addAll(createNewRow(55), createNewRow(5), createNewRow(40));
-        grid.getChildren().addAll(timePeriodLabel, timePeriodSelector, regionLabel, regionSelector);
+        grid.getChildren().addAll(timePeriodLabel, timePeriodComboBox, regionLabel, regionComboBox);
         grid.setPrefWidth(mainLayoutWidth);
         grid.setPrefHeight(headerBarHeight);
 
@@ -111,22 +103,31 @@ public class DataViewInitializer {
         return headerBar;
     }
 
-    private ScrollPane CreateScrollPane()
+    private VBox CreateScrollPane()
     {
-        Chart positiveOverTimeChart = createTimeChart(ChartCategory.Positive);
-        Chart testedOverTimeChart = createTimeChart(ChartCategory.Tested);
-        Chart admittedOverTimeChart = createTimeChart(ChartCategory.Admitted);
-        Chart deathsOverTimeChart = createTimeChart(ChartCategory.Deaths);
+        Chart positiveOverTimeChart = createTimeChart(ChartConfigurations.Positive);
+        dataView.getCharts().put(ChartConfigurations.Positive, positiveOverTimeChart);
+        dataView.getChartsKeys().add(ChartConfigurations.Positive);
 
-        Chart casesByAgeChart = createCasesByAgePieChart();
-        dataView.getCharts().put("Cases By Age", casesByAgeChart);
-        dataView.getChartsKeys().add("Cases By Age");
+        Chart testedOverTimeChart = createTimeChart(ChartConfigurations.Tested);
+        dataView.getCharts().put(ChartConfigurations.Tested, testedOverTimeChart);
+        dataView.getChartsKeys().add(ChartConfigurations.Positive);
 
-        Chart casesBySexChart = createCasesBySexChart();
-        dataView.getCharts().put("Cases By Sex", casesBySexChart);
-        dataView.getChartsKeys().add("Cases By Sex");
+        Chart admittedOverTimeChart = createTimeChart(ChartConfigurations.Admitted);
+        dataView.getCharts().put(ChartConfigurations.Admitted, admittedOverTimeChart);
+        dataView.getChartsKeys().add(ChartConfigurations.Admitted);
 
+        Chart deathsOverTimeChart = createTimeChart(ChartConfigurations.Deaths);
+        dataView.getCharts().put(ChartConfigurations.Deaths, deathsOverTimeChart);
+        dataView.getChartsKeys().add(ChartConfigurations.Deaths);
 
+        Chart casesByAgeChart = createCasesByAgePieChart(ChartConfigurations.ByAge);
+        dataView.getCharts().put(ChartConfigurations.ByAge, casesByAgeChart);
+        dataView.getChartsKeys().add(ChartConfigurations.ByAge);
+
+        Chart casesBySexChart = createCasesBySexChart(ChartConfigurations.BySex);
+        dataView.getCharts().put(ChartConfigurations.BySex, casesBySexChart);
+        dataView.getChartsKeys().add(ChartConfigurations.BySex);
 
 
         HBox pieCharts = new HBox(0);
@@ -143,49 +144,58 @@ public class DataViewInitializer {
         areaScrollPane.setPannable(true);
         areaScrollPane.setContent(charts);
 
-        return areaScrollPane;
+
+        VBox chartsVBox = new VBox();
+        chartsVBox.getChildren().add(areaScrollPane);
+
+        return chartsVBox;
     }
 
     public DataView CreateDataView()
     {
-        headerBar = CreateHeaderBar();
-        chartsArea = CreateScrollPane();
+        dataView.setHeaderBar(CreateHeaderBar());
+        dataView.setChartsArea(CreateScrollPane());
 
-        mainLayout.getChildren().addAll(headerBar, chartsArea);
+
+
+        mainLayout.getChildren().addAll(dataView.getHeaderBar(), dataView.getChartsArea());
         mainLayout.setPrefWidth(mainLayoutWidth);
+
+        dataView.setMainLayout(mainLayout);
 
         return dataView;
     }
 
-    private Chart createTimeChart(ChartCategory chartCategory){
+    private Chart createTimeChart(ChartConfigurations chartConfiguration){
 
         TypedSeries<String,Number> cumulativeSeries = TypedSeries.<String,Number>
-                builder(chartCategory.getLegendTwoTitle()).area()
+                builder(chartConfiguration.getLegendTwoTitle()).area()
                 .withYAxisIndex(0)
                 .withYAxisSide(Side.LEFT)
                 .build();
 
         TypedSeries<String,Number> dailySeries = TypedSeries.<String,Number>
-                builder(chartCategory.getLegendOneTitle()).area()
+                builder(chartConfiguration.getLegendOneTitle()).area()
                 .withYAxisIndex(1)
                 .withYAxisSide(Side.RIGHT)
                 .build();
 
 
-        DataFile dataFile = chartCategory.getDataFile();
+        DataFile dataFile = chartConfiguration.getDataFile();
 
-        for (int i = 0; i < dataFile.getLineKeys().size() - chartCategory.getNumberOfTotalLines(); i++){ // Dont read last line
+        for (int i = 0; i < dataFile.getLineKeys().size() - chartConfiguration.getNumberOfTotalLines(); i++){ // Dont read last line
 
             String lineKey = dataFile.getLineKeys().get(i);
-            chartCategory.addToCumulativeValue(dataFile.getData().get(lineKey).get(dataFile.getDataFieldKeys().get(chartCategory.getIndexOfData())));
+            chartConfiguration.addToCumulativeValue(dataFile.getData().get(lineKey).get(dataFile.getDataFieldKeys().get(chartConfiguration.getIndexOfData())));
 
-            dailySeries.addData(lineKey, dataFile.getData().get(lineKey).get(dataFile.getDataFieldKeys().get(chartCategory.getIndexOfData())));
-            cumulativeSeries.addData(lineKey, chartCategory.getCumulativeValue());
+            dailySeries.addData(lineKey, dataFile.getData().get(lineKey).get(dataFile.getDataFieldKeys().get(chartConfiguration.getIndexOfData())));
+            cumulativeSeries.addData(lineKey, chartConfiguration.getCumulativeValue());
         }
 
         MultiTypeChart<String, Number> multiTypeChart= new MultiTypeChart<>(new CategoryAxis(), new NumberAxis());
 
-        multiTypeChart.setTitle(chartCategory.getTitle());
+        multiTypeChart.setTitle(chartConfiguration.getTitle());
+        multiTypeChart.setId(String.valueOf(chartConfiguration.getConfigurationIndex()));
 
         multiTypeChart.addSeries(cumulativeSeries);
         multiTypeChart.addSeries(dailySeries);
@@ -196,7 +206,7 @@ public class DataViewInitializer {
         return multiTypeChart;
     }
 
-    private Chart createCasesByAgePieChart(){
+    private Chart createCasesByAgePieChart(ChartConfigurations chartConfiguration){
 
         DashboardModel data = new DashboardModel();
         DataFile casesByAge = data.getCasesByAgeData();
@@ -212,17 +222,16 @@ public class DataViewInitializer {
         }
 
         final Chart pieChart = new PieChart(pieChartData);
-        pieChart.setTitle("Cases By Age");
+        pieChart.setTitle(chartConfiguration.getTitle());
         pieChart.setLegendVisible(false);
         pieChart.setPrefWidth(mainLayoutWidth);
         return pieChart;
     }
 
 
-    private Chart createCasesBySexChart(){
-        DashboardModel data = new DashboardModel();
-        DataFile casesBySexData = data.getCasesBySexData();
+    private Chart createCasesBySexChart(ChartConfigurations chartConfiguration){
 
+        DataFile casesBySexData = chartConfiguration.getDataFile();
 
         int indexOfLast = casesBySexData.getLineKeys().size() - 1;
         String keyOfLast = casesBySexData.getLineKeys().get(indexOfLast);
@@ -240,9 +249,10 @@ public class DataViewInitializer {
         pieChartData.add(new PieChart.Data("Women", percentWomen));
 
         final Chart pieChart = new PieChart(pieChartData);
-        pieChart.setTitle("Cases By Sex");
+        pieChart.setTitle(chartConfiguration.getTitle());
         pieChart.setLegendVisible(false);
         pieChart.setPrefWidth(mainLayoutWidth);
+
 
         return pieChart;
     }
@@ -263,72 +273,3 @@ public class DataViewInitializer {
 }
 
 
-enum ChartCategory{
-    Positive ("Positive Cases","Daily Positive","Total Positive",0,2,0, new DataFile()),
-    Tested ("Tested","Daily Tested","Total Tested",4,2,0, new DataFile()),
-    Admitted ("Admitted","Daily Admitted","Total Admitted",0,1,0, new DataFile()),
-    Deaths ("Deaths","Daily Deaths","Total Deaths",0,1,0, new DataFile());
-
-    private String title;
-    private String legendOneTitle;
-    private String legendTwoTitle;
-    private int indexOfData;
-    private int numberOfTotalLines;
-    private int cumulativeValue;
-    private DataFile dataFile;
-
-    ChartCategory(String title, String legendOneTitle, String legendTwoTitle, int indexOfData, int numberOfTotalLines, int cumalativeValue, DataFile dataFile){
-        this.title = title;
-        this.legendOneTitle = legendOneTitle;
-        this.legendTwoTitle = legendTwoTitle;
-        this.indexOfData = indexOfData;
-        this.numberOfTotalLines = numberOfTotalLines;
-        this.cumulativeValue = cumalativeValue;
-        this.dataFile = dataFile;
-    }
-
-    public String getTitle(){
-        return title;
-    }
-
-    public String getLegendOneTitle(){
-        return legendOneTitle;
-    }
-
-    public String getLegendTwoTitle(){
-        return legendTwoTitle;
-    }
-
-    public int getIndexOfData(){
-        return indexOfData;
-    }
-
-    public int getNumberOfTotalLines(){
-        return numberOfTotalLines;
-    }
-
-    public void addToCumulativeValue(int value){
-        cumulativeValue += value;
-    }
-
-    public int getCumulativeValue(){
-        return cumulativeValue;
-    }
-
-    public DataFile getDataFile(){
-
-        DashboardModel data = new DashboardModel();
-        if (this == Positive){
-            return data.getTestsOverTimeData();
-        }
-        else if (this == Tested){
-            return data.getTestsOverTimeData();
-        }
-        else if (this == Admitted){
-            return data.getNewlyAdmittedOverTimeData();
-        }
-        else {
-            return data.getDeathsOverTimeData();
-        }
-    }
-}
