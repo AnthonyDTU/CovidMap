@@ -74,7 +74,7 @@ public class DashboardController {
         {
             // Tutorial for reading file found at https://www.javatpoint.com/java-string-to-int, but adapted a lot
             // parsing a CSV file into BufferedReader class constructor
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(folderPath + fileName));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader("Covid Data\\" + fileName));
 
             String[] data = bufferedReader.readLine().split(splitBy);
             List<String> dataFieldKeys = new ArrayList<>(Arrays.asList(data));

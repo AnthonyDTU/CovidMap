@@ -34,6 +34,7 @@ public class KPIField {
     public void setValueLabelText(String value){
         valueLabel.setText(value);
     }
+    public String getValueLabelText() { return valueLabel.getText(); }
 
     public VBox getLayout(){
         return layout;
