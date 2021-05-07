@@ -1,7 +1,6 @@
 package Dashboard.Components;
 
-import Dashboard.Model.DashboardModel;
-import Dashboard.Model.DataFile;
+import Dashboard.DashboardModel;
 
 public enum ChartConfigurations {
 

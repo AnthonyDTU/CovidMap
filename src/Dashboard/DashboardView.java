@@ -1,7 +1,6 @@
-package Dashboard.View;
+package Dashboard;
 
 import Dashboard.Components.DataView;
-import Dashboard.Components.HeaderView;
 import Dashboard.Components.MapView;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -9,7 +8,6 @@ import javafx.scene.layout.*;
 
 public class DashboardView {
 
-    HeaderView headerView;
     DataView dataView;
     MapView mapView;
     VBox root;
@@ -17,14 +15,6 @@ public class DashboardView {
 
     public DashboardView(){
     }
-
-    public void setHeaderView(HeaderView headerView){
-        this.headerView = headerView;
-    }
-    public HeaderView getHeaderView(){
-        return headerView;
-    }
-
 
     public void setMapView(MapView mapView){
         this.mapView = mapView;
@@ -45,11 +35,8 @@ public class DashboardView {
     public Parent asParent() {
 
         root = CreateCompleteUI(dataView, mapView);
-
         root.setAlignment(Pos.CENTER);
-
         root.setStyle("-fx-background-color: white;");
-
         return root;
     }
 

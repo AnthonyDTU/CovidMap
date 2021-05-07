@@ -1,4 +1,4 @@
-package Dashboard.Model;
+package Dashboard.Components;
 
 import java.util.ArrayList;
 import java.util.HashMap;

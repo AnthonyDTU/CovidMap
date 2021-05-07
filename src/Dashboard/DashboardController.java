@@ -1,12 +1,9 @@
-package Dashboard.Controller;
+package Dashboard;
 
 import Dashboard.Components.ChartConfigurations;
-import Dashboard.Controller.ComponentIntializers.DataViewInitializer;
-import Dashboard.Controller.ComponentIntializers.HeaderViewInitializer;
-import Dashboard.Model.DataFile;
-import Dashboard.Model.DashboardModel;
-import Dashboard.Controller.ComponentIntializers.MapViewInitializer;
-import Dashboard.View.DashboardView;
+import Dashboard.ComponentIntializers.DataViewInitializer;
+import Dashboard.Components.DataFile;
+import Dashboard.ComponentIntializers.MapViewInitializer;
 import com.github.kilianB.MultiTypeChart;
 import com.github.kilianB.TypedSeries;
 import javafx.geometry.Side;
@@ -16,7 +13,6 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Button;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -60,16 +56,12 @@ public class DashboardController {
         this.model.setNewlyAdmittedOverTimeData(LoadFile(model.getFolderPath(), newlyAdmittedOverTimeFilename));
         this.model.setRegionSummaryData(LoadFile(model.getFolderPath(), regionSummaryFilename));
         this.model.setCasesByAgeData(LoadFile(model.getFolderPath(), casesByAgeFilename));
-        model.setCasesBySexData(LoadFile(model.getFolderPath(), casesBySexFilename));
+        this.model.setCasesBySexData(LoadFile(model.getFolderPath(), casesBySexFilename));
 
         // Intialize the View
-        // Header Bar:
-        HeaderViewInitializer headerBarInitializer = new HeaderViewInitializer();
-        this.view.setHeaderView(headerBarInitializer.CreateHeaderView());
         //
         // Map View:
-        MapViewInitializer mapViewInitializer = new MapViewInitializer();
-        this.view.setMapView(mapViewInitializer.CreateMapView());
+        this.view.setMapView(new MapViewInitializer().CreateMapView());
         this.view.getMapView().addEventHandlerToRegionButtons(new RegionButtonEventHandler());
         this.view.getMapView().addEventHandlerToImageVIew(new ImageViewEventHandler());
         //
@@ -77,11 +69,9 @@ public class DashboardController {
         DataViewInitializer dataViewInitializer = new DataViewInitializer();
         this.view.setDataView(dataViewInitializer.CreateDataView());
         this.view.getDataView().addEventHandlerToComboBox(new FilterComboBoxesEventHandler());
-
-
     }
 
-    public DataFile LoadFile(String folderPath, String fileName)
+    private DataFile LoadFile(String folderPath, String fileName)
     {
         try
         {
@@ -98,11 +88,7 @@ public class DashboardController {
 
             while ((line = bufferedReader.readLine()) != null)
             {
-
-
-
                 data = line.replace(".", "").replace(",",".").split(splitBy);
-
                 HashMap<String, Integer> dataHashMap = new HashMap<>();
 
                 for (int i = 1; i < data.length; i++){
@@ -163,6 +149,8 @@ public class DashboardController {
         }
     }
 
+
+
     class FilterComboBoxesEventHandler implements EventHandler<ActionEvent>{
 
         @Override
@@ -194,9 +182,7 @@ public class DashboardController {
                 Chart multiTypeChart = createTimeChart(chartConfiguration, startIndex);
                 view.getDataView().getCharts().put(chartConfiguration, multiTypeChart);
                 newChartsArea.getChildren().add(multiTypeChart);
-
             }
-
 
             HBox pieCharts = new HBox(0);
             pieCharts.getChildren().addAll(view.getDataView().getCharts().get(ChartConfigurations.ByAge), view.getDataView().getCharts().get(ChartConfigurations.BySex));
@@ -209,7 +195,7 @@ public class DashboardController {
             newChartsScrollPane.setPannable(true);
             newChartsScrollPane.setContent(newChartsArea);
 
-            view.getDataView().ReloadCharts(newChartsScrollPane);
+            view.getDataView().reloadCharts(newChartsScrollPane);
         }
 
 
@@ -253,9 +239,5 @@ public class DashboardController {
 
             return multiTypeChart;
         }
-
     }
-
-
-
 }
