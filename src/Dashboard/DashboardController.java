@@ -27,8 +27,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-
-
 public class DashboardController {
 
     private DashboardModel model;
@@ -66,8 +64,7 @@ public class DashboardController {
         this.view.getMapView().addEventHandlerToImageVIew(new ImageViewEventHandler());
         //
         // Data View:
-        DataViewInitializer dataViewInitializer = new DataViewInitializer();
-        this.view.setDataView(dataViewInitializer.CreateDataView());
+        this.view.setDataView(new DataViewInitializer().CreateDataView());
         this.view.getDataView().addEventHandlerToComboBox(new FilterComboBoxesEventHandler());
     }
 
@@ -93,7 +90,7 @@ public class DashboardController {
 
                 for (int i = 1; i < data.length; i++){
 
-                    if (data[i].indexOf("(") != -1){
+                    if (data[i].contains("(")){
                         int index = data[i].indexOf("(");
                         data[i] = data[i].substring(0, index);
                     }
@@ -128,7 +125,6 @@ public class DashboardController {
         }
     }
 
-
     class RegionButtonEventHandler implements EventHandler<ActionEvent> {
 
         @Override
@@ -148,8 +144,6 @@ public class DashboardController {
             UpdateRegionKPIFields(sender.getId());
         }
     }
-
-
 
     class FilterComboBoxesEventHandler implements EventHandler<ActionEvent>{
 

@@ -43,17 +43,16 @@ public class DashboardView {
 
     private VBox CreateCompleteUI(DataView dataView, MapView mapView)
     {
-        GridPane mainGridPane = new GridPane();
-
         ColumnConstraints column1 = new ColumnConstraints();
         column1.setPercentWidth(55);
         ColumnConstraints column2 = new ColumnConstraints();
         column2.setPercentWidth(45);
-        mainGridPane.getColumnConstraints().addAll(column1, column2);
-
 
         GridPane.setConstraints(dataView.getMainLayout(),1,0);
         GridPane.setConstraints(mapView.getMainLayout(), 0, 0);
+
+        GridPane mainGridPane = new GridPane();
+        mainGridPane.getColumnConstraints().addAll(column1, column2);
         mainGridPane.getChildren().addAll(dataView.getMainLayout(), mapView.getMainLayout());
         mainGridPane.setAlignment(Pos.CENTER);
 
