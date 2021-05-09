@@ -1,14 +1,10 @@
 package Tests;
 
 import Dashboard.Components.KPIField;
-import Dashboard.Main;
-import com.sun.glass.ui.Application;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.control.Label;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class KPIFieldTest {
 

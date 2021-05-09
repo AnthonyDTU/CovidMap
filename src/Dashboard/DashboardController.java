@@ -4,6 +4,8 @@ import Dashboard.Components.ChartConfigurations;
 import Dashboard.ComponentIntializers.DataViewInitializer;
 import Dashboard.Components.DataFile;
 import Dashboard.ComponentIntializers.MapViewInitializer;
+import Dashboard.Components.DataView;
+import Dashboard.Components.MapView;
 import com.github.kilianB.MultiTypeChart;
 import com.github.kilianB.TypedSeries;
 import javafx.geometry.Side;
@@ -19,6 +21,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import javax.xml.crypto.Data;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -59,12 +62,12 @@ public class DashboardController {
         // Intialize the View
         //
         // Map View:
-        this.view.setMapView(new MapViewInitializer().CreateMapView());
+        this.view.setMapView(new MapView().InitializeMapView());
         this.view.getMapView().addEventHandlerToRegionButtons(new RegionButtonEventHandler());
         this.view.getMapView().addEventHandlerToImageVIew(new ImageViewEventHandler());
         //
         // Data View:
-        this.view.setDataView(new DataViewInitializer().CreateDataView());
+        this.view.setDataView(new DataView().InitializeDataView());
         this.view.getDataView().addEventHandlerToComboBox(new FilterComboBoxesEventHandler());
     }
 

@@ -24,14 +24,14 @@ public class DataViewInitializer {
 
     // ComboBox introduktion:
     // https://docs.oracle.com/javafx/2/ui_controls/combo-box.htm
-    ObservableList<String> timePeriodOptions =
+    private final ObservableList<String> timePeriodOptions =
             FXCollections.observableArrayList(
                     "All Time",
                     "30 Dage",
                     "7 Dage"
             );
 
-    ObservableList<String> regionOptions =
+    private final ObservableList<String> regionOptions =
             FXCollections.observableArrayList(
                     "Danmark",
                     "Nordjylland",
@@ -41,29 +41,19 @@ public class DataViewInitializer {
                     "Hovedstaden"
             );
 
-
-
-    DataView dataView;
     public DataViewInitializer(){
-        dataView = new DataView(new VBox(),
-                                new HBox(),
-                                new ComboBox(),
-                                new ComboBox(),
-                                new VBox(),
-                                new ArrayList<ChartConfigurations>(),
-                                new HashMap<ChartConfigurations, Chart>());
     }
 
 
-    public DataView CreateDataView()
+    public DataView InitializeDataView(DataView dataView)
     {
         dataView.setChartsKeys(createChartKeys());
-        dataView.setCharts(createCharts());
-        dataView.setTimePeriodComboBox(createTimePeriodComboBox());
-        dataView.setRegionComboBox(createRegionComboBox());
-        dataView.setHeaderBar(createHeaderBar());
-        dataView.setChartsArea(createChartsArea());
-        dataView.setMainLayout(createMainLayout());
+        dataView.setCharts(createCharts(dataView));
+        dataView.setTimePeriodComboBox(createTimePeriodComboBox(dataView));
+        dataView.setRegionComboBox(createRegionComboBox(dataView));
+        dataView.setHeaderBar(createHeaderBar(dataView));
+        dataView.setChartsArea(createChartsArea(dataView));
+        dataView.setMainLayout(createMainLayout(dataView));
 
         return dataView;
     }
@@ -80,7 +70,7 @@ public class DataViewInitializer {
         return chartConfigurationKeys;
     }
 
-    private HashMap<ChartConfigurations, Chart> createCharts()
+    private HashMap<ChartConfigurations, Chart> createCharts(DataView dataView)
     {
         HashMap<ChartConfigurations, Chart> charts = new HashMap<>();
 
@@ -89,10 +79,10 @@ public class DataViewInitializer {
             Chart chart;
 
             if (chartConfiguration == ChartConfigurations.ByAge){
-                chart = createCasesByAgePieChart(chartConfiguration);
+                chart = createCasesByAgePieChart(dataView, chartConfiguration);
             }
             else if (chartConfiguration == ChartConfigurations.BySex){
-                chart = createCasesBySexChart(chartConfiguration);
+                chart = createCasesBySexChart(dataView, chartConfiguration);
             }
             else {
                 chart = createTimeChart(chartConfiguration);
@@ -104,17 +94,17 @@ public class DataViewInitializer {
         return charts;
     }
 
-    private ComboBox createTimePeriodComboBox()
+    private ComboBox createTimePeriodComboBox(DataView dataView)
     {
-        return createFilterComboBox(0, timePeriodOptions);
+        return createFilterComboBox(dataView,0, timePeriodOptions);
     }
 
-    private ComboBox createRegionComboBox()
+    private ComboBox createRegionComboBox(DataView dataView)
     {
-        return createFilterComboBox(1, regionOptions);
+        return createFilterComboBox(dataView,1, regionOptions);
     }
 
-    private HBox createHeaderBar()
+    private HBox createHeaderBar(DataView dataView)
     {
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -131,7 +121,7 @@ public class DataViewInitializer {
         return headerBar;
     }
 
-    private VBox createChartsArea()
+    private VBox createChartsArea(DataView dataView)
     {
         HBox pieCharts = new HBox(0);
         pieCharts.setPrefWidth(dataView.getMainLayoutWidth());
@@ -162,7 +152,7 @@ public class DataViewInitializer {
         return chartsArea;
     }
 
-    private VBox createMainLayout()
+    private VBox createMainLayout(DataView dataView)
     {
         VBox mainLayout = new VBox(10);
         mainLayout.getChildren().addAll(dataView.getHeaderBar(), dataView.getChartsArea());
@@ -174,7 +164,7 @@ public class DataViewInitializer {
     // Helper Functions
     // **********************************************************************************************
 
-    private ComboBox createFilterComboBox(int gridspot, ObservableList<String> data){
+    private ComboBox createFilterComboBox(DataView dataView, int gridspot, ObservableList<String> data){
 
         ComboBox comboBox = new ComboBox();
         comboBox.setItems(data);
@@ -240,7 +230,7 @@ public class DataViewInitializer {
         return multiTypeChart;
     }
 
-    private Chart createCasesByAgePieChart(ChartConfigurations chartConfiguration){
+    private Chart createCasesByAgePieChart(DataView dataView, ChartConfigurations chartConfiguration){
 
         DashboardModel data = new DashboardModel();
         DataFile casesByAge = data.getCasesByAgeData();
@@ -265,7 +255,7 @@ public class DataViewInitializer {
     }
 
 
-    private Chart createCasesBySexChart(ChartConfigurations chartConfiguration){
+    private Chart createCasesBySexChart(DataView dataView, ChartConfigurations chartConfiguration){
 
         DataFile casesBySexData = chartConfiguration.getDataFile();
 

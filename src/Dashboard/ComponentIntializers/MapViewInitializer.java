@@ -24,20 +24,11 @@ import java.util.List;
 
 public class MapViewInitializer {
 
-    MapView mapView;
     public MapViewInitializer(){
-        mapView = new MapView(new VBox(),
-                new VBox(),
-                new ImageView(),
-                new ArrayList<String>(),
-                new HashMap<String, Button>(),
-                new Label(),
-                new ArrayList<String>(),
-                new HashMap<String, KPIField>());
     }
 
 
-    public MapView CreateMapView() {
+    public MapView InitializeMapView(MapView mapView) {
 
         DashboardModel data = new DashboardModel();
         DataFile regionSummary = data.getRegionSummary();
@@ -47,10 +38,10 @@ public class MapViewInitializer {
         mapView.setKPIFields(createKPIFields(regionSummary));
         mapView.setRegionButtonKeys(createRegionButtonKeys(regionSummary));
         mapView.setRegionButtons(createRegionButtons(regionSummary));
-        mapView.setImageView(createMapImageView(regionSummary));
-        mapView.setMapPane(createMapPane());
-        mapView.setMapHeader(createMapHeader());
-        mapView.setMainLayout(createLayout());
+        mapView.setImageView(createMapImageView(mapView, regionSummary));
+        mapView.setMapPane(createMapPane(mapView));
+        mapView.setMapHeader(createMapHeader(mapView));
+        mapView.setMainLayout(createLayout(mapView));
 
         return mapView;
     }
@@ -117,7 +108,7 @@ public class MapViewInitializer {
         return regionButtons;
     }
 
-    private ImageView createMapImageView(DataFile regionSummary){
+    private ImageView createMapImageView(MapView mapView, DataFile regionSummary){
 
         ImageView mapImageView = new ImageView();
 
@@ -136,7 +127,7 @@ public class MapViewInitializer {
         return mapImageView;
     }
 
-    private Pane createMapPane(){
+    private Pane createMapPane(MapView mapView){
 
         Pane mapPane = new Pane();
         mapPane.setMaxWidth(mapView.getMainLayoutWidth());
@@ -149,7 +140,7 @@ public class MapViewInitializer {
         return mapPane;
     }
 
-    private VBox createMapHeader(){
+    private VBox createMapHeader(MapView mapView){
 
         GridPane KPIGrid = new GridPane();
         KPIGrid.getRowConstraints().addAll(createNewRow(40), createNewRow(60));
@@ -173,7 +164,7 @@ public class MapViewInitializer {
         return mapHeader;
     }
 
-    private VBox createLayout(){
+    private VBox createLayout(MapView mapView){
 
         VBox mainLayout = new VBox(10);
         mainLayout.getChildren().addAll(mapView.getMapHeader(), mapView.getMapPane());

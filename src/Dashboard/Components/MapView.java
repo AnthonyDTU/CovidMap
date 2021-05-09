@@ -1,5 +1,6 @@
 package Dashboard.Components;
 
+import Dashboard.ComponentIntializers.MapViewInitializer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -8,6 +9,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,15 +29,20 @@ public class MapView {
     private final int mainLayoutWidth = 800;
     private final int headerHeight = 100;
 
-    public MapView(VBox mainLayout,VBox mapHeader, ImageView imageView, List<String> regionButtonKeys, HashMap<String, Button> regionButtons, Label KPIHeaderLabel, List<String> KPIFieldKeys, HashMap<String, KPIField> KPIFields){
-        this.mainLayout = mainLayout;
-        this.mapHeader = mapHeader;
-        this.imageView = imageView;
-        this.regionButtonKeys = regionButtonKeys;
-        this.regionButtons = regionButtons;
-        this.KPIHeaderLabel = KPIHeaderLabel;
-        this.KPIFieldKeys = KPIFieldKeys;
-        this.KPIFields = KPIFields;
+    public MapView(){
+        this.mainLayout = new VBox();
+        this.mapHeader = new VBox();
+        this.imageView = new ImageView();
+        this.regionButtonKeys = new ArrayList<>();
+        this.regionButtons = new HashMap<String, Button>();
+        this.KPIHeaderLabel = new Label();
+        this.KPIFieldKeys = new ArrayList<>();
+        this.KPIFields = new HashMap<String, KPIField>();
+    }
+
+    public MapView InitializeMapView(){
+        MapViewInitializer initializer = new MapViewInitializer();
+        return initializer.InitializeMapView(this);
     }
 
     public int getMainLayoutWidth() { return mainLayoutWidth; }

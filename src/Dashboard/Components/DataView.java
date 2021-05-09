@@ -1,5 +1,6 @@
 package Dashboard.Components;
 
+import Dashboard.ComponentIntializers.DataViewInitializer;
 import com.sun.glass.ui.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -8,6 +9,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,14 +28,19 @@ public class DataView {
     private final int comboBoxWidth = 250;
 
 
-    public DataView(VBox mainLayout, HBox headerBar, ComboBox timePeriodComboBox, ComboBox regionComboBox, VBox chartsArea, List<ChartConfigurations> chartsKeys, HashMap<ChartConfigurations, Chart> charts){
-        this.mainLayout = mainLayout;
-        this.headerBar = headerBar;
-        this.timePeriodComboBox = timePeriodComboBox;
-        this.regionComboBox = regionComboBox;
-        this.chartsArea = chartsArea;
-        this.chartsKeys = chartsKeys;
-        this.charts = charts;
+    public DataView(){
+        this.mainLayout = new VBox();
+        this.headerBar = new HBox();
+        this.timePeriodComboBox = new ComboBox();
+        this.regionComboBox = new ComboBox();
+        this.chartsArea = new VBox();
+        this.chartsKeys = new ArrayList<>();
+        this.charts = new HashMap<ChartConfigurations, Chart>();
+    }
+
+    public DataView InitializeDataView(){
+        DataViewInitializer initializer = new DataViewInitializer();
+        return initializer.InitializeDataView(this);
     }
 
     public int getMainLayoutWidth() { return mainLayoutWidth; }
