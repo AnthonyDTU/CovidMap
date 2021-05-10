@@ -13,9 +13,6 @@ public class KPIField {
     private Label titleLabel;
     private Label valueLabel;
 
-    public KPIField(){
-    }
-
     public KPIField(String title, String value)
     {
         titleLabel = new Label(title);

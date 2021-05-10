@@ -10,8 +10,7 @@ public class DashboardView {
 
     DataView dataView = new DataView();
     MapView mapView = new MapView();
-    VBox root;
-
+    VBox root = new VBox();
 
     public DashboardView(){
     }
@@ -23,7 +22,6 @@ public class DashboardView {
         return mapView;
     }
 
-
     public void setDataView(DataView dataView){
         this.dataView = dataView;
     }
@@ -31,17 +29,7 @@ public class DashboardView {
         return dataView;
     }
 
-
-    public Parent asParent() {
-
-        root = CreateCompleteUI(dataView, mapView);
-        root.setAlignment(Pos.CENTER);
-        root.setStyle("-fx-background-color: white;");
-        return root;
-    }
-
-
-    private VBox CreateCompleteUI(DataView dataView, MapView mapView)
+    public void createRoot(DataView dataView, MapView mapView)
     {
         ColumnConstraints column1 = new ColumnConstraints();
         column1.setPercentWidth(55);
@@ -56,11 +44,12 @@ public class DashboardView {
         mainGridPane.getChildren().addAll(dataView.getMainLayout(), mapView.getMainLayout());
         mainGridPane.setAlignment(Pos.CENTER);
 
-        VBox root = new VBox(10);
         root.setAlignment(Pos.TOP_CENTER);
         root.getChildren().addAll(mainGridPane);
-        root.setBackground(Background.EMPTY);
+        root.setStyle("-fx-background-color: white;");
+    }
 
+    public Parent asParent() {
         return root;
     }
 }

@@ -53,6 +53,8 @@ public class DashboardController {
             // Data View:
             this.view.setDataView(new DataView().InitializeDataView());
             this.view.getDataView().addEventHandlerToComboBox(new FilterComboBoxesEventHandler());
+            //
+            this.view.createRoot(view.getDataView(), view.getMapView());
         }
         else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -60,8 +62,6 @@ public class DashboardController {
             alert.setContentText("One or more files could not be found, or were not loaded correctly");
             alert.show();
         }
-
-
     }
 
     class RegionButtonEventHandler implements EventHandler<ActionEvent> {

@@ -6,8 +6,6 @@ import Dashboard.Components.DataFile;
 import Dashboard.Components.ChartConfigurations;
 import Dashboard.Components.DataView;
 
-import com.github.kilianB.MultiTypeChart;
-import com.github.kilianB.TypedSeries;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.*;
@@ -32,15 +30,7 @@ public class DataViewInitializer {
                     "7 Dage"
             );
 
-    private ObservableList<String> regionOptions =
-            FXCollections.observableArrayList(
-                    "Danmark",
-                    "Nordjylland",
-                    "Midtjylland",
-                    "Syddanmark",
-                    "Sjælland",
-                    "Hovedstaden"
-            );
+    private ObservableList<String> municipalityOptions = FXCollections.observableArrayList();
 
     public DataViewInitializer(){
     }
@@ -51,7 +41,7 @@ public class DataViewInitializer {
         dataView.setChartsKeys(createChartKeys());
         dataView.setCharts(createCharts(dataView));
         dataView.setTimePeriodComboBox(createTimePeriodComboBox(dataView));
-        dataView.setMunicipalityComboBox(createRegionComboBox(dataView));
+        dataView.setMunicipalityComboBox(createMunicipalityComboBox(dataView));
         dataView.setHeaderBar(createHeaderBar(dataView));
         dataView.setChartsArea(createChartsArea(dataView));
         dataView.setMainLayout(createMainLayout(dataView));
@@ -100,16 +90,16 @@ public class DataViewInitializer {
         return createFilterComboBox(dataView,0, timePeriodOptions);
     }
 
-    private ComboBox createRegionComboBox(DataView dataView)
+    private ComboBox createMunicipalityComboBox(DataView dataView)
     {
         DashboardModel data = new DashboardModel();
         DataFile municipalityData = data.getMunicipalityPositiveOverTime();
 
-        regionOptions.clear();
-        regionOptions.add("Danmark");
-        regionOptions.addAll(municipalityData.getDataFieldKeys());
+        municipalityOptions.clear();
+        municipalityOptions.add("Danmark");
+        municipalityOptions.addAll(municipalityData.getDataFieldKeys());
 
-        return createFilterComboBox(dataView,1, regionOptions);
+        return createFilterComboBox(dataView,1, municipalityOptions);
     }
 
     private HBox createHeaderBar(DataView dataView)
