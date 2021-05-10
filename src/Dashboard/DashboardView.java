@@ -8,8 +8,8 @@ import javafx.scene.layout.*;
 
 public class DashboardView {
 
-    DataView dataView;
-    MapView mapView;
+    DataView dataView = new DataView();
+    MapView mapView = new MapView();
     VBox root;
 
 

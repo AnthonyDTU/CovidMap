@@ -24,17 +24,6 @@ class DashboardControllerTest {
         Assertions.assertNotNull(model.getRegionSummary());
         Assertions.assertNotNull(model.getCasesByAgeData());
         Assertions.assertNotNull(model.getCasesBySexData());
-
-
-
-
-
-
-
-
-
-
-
     }
 
 }

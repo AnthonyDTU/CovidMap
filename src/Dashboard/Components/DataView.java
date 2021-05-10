@@ -1,7 +1,6 @@
 package Dashboard.Components;
 
 import Dashboard.ComponentIntializers.DataViewInitializer;
-import com.sun.glass.ui.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.chart.Chart;
@@ -18,7 +17,7 @@ public class DataView {
     VBox mainLayout;
     HBox headerBar;
     ComboBox timePeriodComboBox;
-    ComboBox regionComboBox;
+    ComboBox municipalityComboBox;
     VBox chartsArea;
     List<ChartConfigurations> chartsKeys;
     HashMap<ChartConfigurations, Chart> charts;
@@ -32,7 +31,7 @@ public class DataView {
         this.mainLayout = new VBox();
         this.headerBar = new HBox();
         this.timePeriodComboBox = new ComboBox();
-        this.regionComboBox = new ComboBox();
+        this.municipalityComboBox = new ComboBox();
         this.chartsArea = new VBox();
         this.chartsKeys = new ArrayList<>();
         this.charts = new HashMap<ChartConfigurations, Chart>();
@@ -66,11 +65,9 @@ public class DataView {
         return (String) timePeriodComboBox.getValue();
     }
 
-    public void setRegionComboBox(ComboBox regionComboBox) {this.regionComboBox = regionComboBox; }
-    public ComboBox getRegionComboBox() { return regionComboBox; }
-    public String getRegionSelected(){
-        return (String) regionComboBox.getValue();
-    }
+    public void setMunicipalityComboBox(ComboBox regionComboBox) {this.municipalityComboBox = regionComboBox; }
+    public ComboBox getMunicipalityComboBox() { return municipalityComboBox; }
+    public String getMunicipalitySelected(){ return (String) municipalityComboBox.getValue(); }
 
     public void setChartsKeys(List<ChartConfigurations> chartsKeys) { this.chartsKeys = chartsKeys;    }
     public List<ChartConfigurations> getChartsKeys(){
@@ -84,7 +81,7 @@ public class DataView {
 
     public void addEventHandlerToComboBox(EventHandler<ActionEvent> eventHandler){
         timePeriodComboBox.setOnAction(eventHandler);
-        regionComboBox.setOnAction(eventHandler);
+        municipalityComboBox.setOnAction(eventHandler);
     }
 
     public void reloadCharts(ScrollPane newChartArea){

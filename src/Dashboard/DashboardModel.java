@@ -8,7 +8,8 @@ import java.util.List;
 
 public class DashboardModel {
 
-    private String folderPath;
+
+    private boolean allFilesLoadedCorrectly = false;
 
     private static DataFile testsOverTime = new DataFile();
     private static DataFile testsByRegionsOverTime = new DataFile();
@@ -17,22 +18,12 @@ public class DashboardModel {
     private static DataFile regionSummary = new DataFile();
     private static DataFile casesByAge = new DataFile();
     private static DataFile casesBySex = new DataFile();
+    private static DataFile municipalityTestedOverTime = new DataFile();
+    private static DataFile municipalityPositiveOverTime = new DataFile();
 
-    private static List<String> loadedFiles = new ArrayList<>();
 
-    // After public DataBase(String folderPath) has been called once, this initializes the object, with previously loaded data
     public DashboardModel(){
     }
-
-    // Needs to be called once, to initialize the Data
-    public DashboardModel(String folderPath){
-        this.folderPath = folderPath;
-    }
-
-
-    public final void setFolderPath(String folderPath) { this.folderPath = folderPath; }
-    public String getFolderPath() { return folderPath; }
-
 
     public final void setTestsOverTimeData(DataFile testsOverTime) { this.testsOverTime = testsOverTime; }
     public DataFile getTestsOverTimeData() { return testsOverTime; }
@@ -46,18 +37,42 @@ public class DashboardModel {
     public DataFile getDeathsOverTimeData() { return deathsOverTime; }
 
 
-    public final void setNewlyAdmittedOverTimeData(DataFile newlyAdmittedOverTime) { this.newlyAdmittedOverTime = newlyAdmittedOverTime; }
+    public void setNewlyAdmittedOverTimeData(DataFile newlyAdmittedOverTime) { this.newlyAdmittedOverTime = newlyAdmittedOverTime; }
     public DataFile getNewlyAdmittedOverTimeData() { return newlyAdmittedOverTime; }
 
 
-    public final void setRegionSummaryData(DataFile regionSummary) {this.regionSummary = regionSummary; }
+    public void setRegionSummaryData(DataFile regionSummary) {this.regionSummary = regionSummary; }
     public DataFile getRegionSummary() { return regionSummary; }
 
 
-    public final void setCasesByAgeData(DataFile casesByAge) { this.casesByAge = casesByAge; }
+    public void setCasesByAgeData(DataFile casesByAge) { this.casesByAge = casesByAge; }
     public DataFile getCasesByAgeData() { return casesByAge; }
 
 
-    public final void setCasesBySexData(DataFile casesBySex) { this.casesBySex = casesBySex; }
+    public void setCasesBySexData(DataFile casesBySex) { this.casesBySex = casesBySex; }
     public DataFile getCasesBySexData() { return casesBySex; }
+
+    public void setMunicipalityTestedOverTime(DataFile municipalityTestedOverTime) { this.municipalityTestedOverTime = municipalityTestedOverTime; }
+    public DataFile getMunicipalityTestedOverTime() { return municipalityTestedOverTime; }
+
+    public void setMunicipalityPositiveOverTime(DataFile municipalityPositiveOverTime) { this.municipalityPositiveOverTime = municipalityPositiveOverTime; }
+    public DataFile getMunicipalityPositiveOverTime() { return municipalityPositiveOverTime; }
+
+    public boolean checkAllFilesLoaded(){
+        if (testsOverTime != null &&
+            testsByRegionsOverTime != null &&
+            deathsOverTime != null &&
+            newlyAdmittedOverTime != null &&
+            regionSummary != null &&
+            casesByAge != null &&
+            casesBySex != null &&
+            municipalityTestedOverTime != null &&
+            municipalityPositiveOverTime != null)
+        {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }

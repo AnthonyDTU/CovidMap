@@ -1,5 +1,6 @@
 package Dashboard.ComponentIntializers;
 
+import Dashboard.Components.DataChart;
 import Dashboard.DashboardModel;
 import Dashboard.Components.DataFile;
 import Dashboard.Components.ChartConfigurations;
@@ -31,7 +32,7 @@ public class DataViewInitializer {
                     "7 Dage"
             );
 
-    private final ObservableList<String> regionOptions =
+    private ObservableList<String> regionOptions =
             FXCollections.observableArrayList(
                     "Danmark",
                     "Nordjylland",
@@ -50,7 +51,7 @@ public class DataViewInitializer {
         dataView.setChartsKeys(createChartKeys());
         dataView.setCharts(createCharts(dataView));
         dataView.setTimePeriodComboBox(createTimePeriodComboBox(dataView));
-        dataView.setRegionComboBox(createRegionComboBox(dataView));
+        dataView.setMunicipalityComboBox(createRegionComboBox(dataView));
         dataView.setHeaderBar(createHeaderBar(dataView));
         dataView.setChartsArea(createChartsArea(dataView));
         dataView.setMainLayout(createMainLayout(dataView));
@@ -79,13 +80,13 @@ public class DataViewInitializer {
             Chart chart;
 
             if (chartConfiguration == ChartConfigurations.ByAge){
-                chart = createCasesByAgePieChart(dataView, chartConfiguration);
+                chart = new DataChart().initializeCasesByAgePieChart(chartConfiguration);
             }
             else if (chartConfiguration == ChartConfigurations.BySex){
-                chart = createCasesBySexChart(dataView, chartConfiguration);
+                chart = new DataChart().initializeCasesBySexPieChart(chartConfiguration);
             }
             else {
-                chart = createTimeChart(chartConfiguration);
+                chart = new DataChart().initializeTimeChart(chartConfiguration);
             }
 
             charts.put(chartConfiguration, chart);
@@ -101,6 +102,13 @@ public class DataViewInitializer {
 
     private ComboBox createRegionComboBox(DataView dataView)
     {
+        DashboardModel data = new DashboardModel();
+        DataFile municipalityData = data.getMunicipalityPositiveOverTime();
+
+        regionOptions.clear();
+        regionOptions.add("Danmark");
+        regionOptions.addAll(municipalityData.getDataFieldKeys());
+
         return createFilterComboBox(dataView,1, regionOptions);
     }
 
@@ -110,7 +118,7 @@ public class DataViewInitializer {
         grid.setAlignment(Pos.CENTER);
         grid.getColumnConstraints().addAll(createNewColumn(50), createNewColumn((50)));
         grid.getRowConstraints().addAll(createNewRow(55), createNewRow(5), createNewRow(40));
-        grid.getChildren().addAll(createFilterLabel(0, "Time Period:"), dataView.getTimePeriodComboBox(), createFilterLabel(1, "Region:"), dataView.getRegionComboBox());
+        grid.getChildren().addAll(createFilterLabel(0, "Time Period:"), dataView.getTimePeriodComboBox(), createFilterLabel(1, "Municipallity:"), dataView.getMunicipalityComboBox());
         grid.setPrefWidth(dataView.getMainLayoutWidth());
         grid.setPrefHeight(dataView.getHeaderBarHeight());
 
@@ -138,7 +146,6 @@ public class DataViewInitializer {
                 timeCharts.getChildren().add(dataView.getCharts().get(chartConfiguration));
             }
         }
-
 
         timeCharts.getChildren().add(pieCharts);
         ScrollPane areaScrollPane = new ScrollPane();
@@ -185,103 +192,6 @@ public class DataViewInitializer {
         GridPane.setHalignment(regionLabel, HPos.CENTER);
         GridPane.setValignment(regionLabel, VPos.BOTTOM);
         return regionLabel;
-    }
-
-
-    private Chart createTimeChart(ChartConfigurations chartConfiguration){
-
-        TypedSeries<String,Number> cumulativeSeries = TypedSeries.<String,Number>
-                builder(chartConfiguration.getLegendTwoTitle()).area()
-                .withYAxisIndex(0)
-                .withYAxisSide(Side.LEFT)
-                .build();
-
-        TypedSeries<String,Number> dailySeries = TypedSeries.<String,Number>
-                builder(chartConfiguration.getLegendOneTitle()).area()
-                .withYAxisIndex(1)
-                .withYAxisSide(Side.RIGHT)
-                .build();
-
-
-        DataFile dataFile = chartConfiguration.getDataFile();
-
-        for (int i = 0; i < dataFile.getLineKeys().size() - chartConfiguration.getNumberOfTotalLines(); i++){ // Dont read last line
-
-            String lineKey = dataFile.getLineKeys().get(i);
-            chartConfiguration.addToCumulativeValue(dataFile.getData().get(lineKey).get(dataFile.getDataFieldKeys().get(chartConfiguration.getIndexOfData())));
-
-            dailySeries.addData(lineKey, dataFile.getData().get(lineKey).get(dataFile.getDataFieldKeys().get(chartConfiguration.getIndexOfData())));
-            cumulativeSeries.addData(lineKey, chartConfiguration.getCumulativeValue());
-        }
-
-        // MultiTypeChart is a component found on GitHub:
-        // https://github.com/KilianB/JavaFXMultiChart
-        MultiTypeChart<String, Number> multiTypeChart= new MultiTypeChart<>(new CategoryAxis(), new NumberAxis());
-
-        multiTypeChart.setTitle(chartConfiguration.getTitle());
-        multiTypeChart.setId(String.valueOf(chartConfiguration.getConfigurationIndex()));
-
-        multiTypeChart.addSeries(cumulativeSeries);
-        multiTypeChart.addSeries(dailySeries);
-
-        multiTypeChart.setSeriesColor(1, 90);
-        multiTypeChart.setSeriesColor(2, 50);
-
-        return multiTypeChart;
-    }
-
-    private Chart createCasesByAgePieChart(DataView dataView, ChartConfigurations chartConfiguration){
-
-        DashboardModel data = new DashboardModel();
-        DataFile casesByAge = data.getCasesByAgeData();
-
-        // PieChart introduction found here:
-        // https://docs.oracle.com/javafx/2/charts/pie-chart.htm
-        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
-
-        for (int i = 0; i < casesByAge.getLineKeys().size() - 1; i++){ // Dont read last line
-
-            String lineKey = casesByAge.getLineKeys().get(i);
-            String dataKey = casesByAge.getDataFieldKeys().get(0);
-
-            pieChartData.add(new PieChart.Data(lineKey, casesByAge.getData().get(lineKey).get(dataKey)));
-        }
-
-        final Chart pieChart = new PieChart(pieChartData);
-        pieChart.setTitle(chartConfiguration.getTitle());
-        pieChart.setLegendVisible(false);
-        pieChart.setPrefWidth(dataView.getMainLayoutWidth());
-        return pieChart;
-    }
-
-
-    private Chart createCasesBySexChart(DataView dataView, ChartConfigurations chartConfiguration){
-
-        DataFile casesBySexData = chartConfiguration.getDataFile();
-
-        int indexOfLast = casesBySexData.getLineKeys().size() - 1;
-        String keyOfLast = casesBySexData.getLineKeys().get(indexOfLast);
-
-        int casesWomen = casesBySexData.getData().get(keyOfLast).get(casesBySexData.getDataFieldKeys().get(0));
-        int casesMen = casesBySexData.getData().get(keyOfLast).get(casesBySexData.getDataFieldKeys().get(1));
-        int totalCases = casesBySexData.getData().get(keyOfLast).get(casesBySexData.getDataFieldKeys().get(2));
-
-        float percentageMen = (float) casesMen / totalCases * 100;
-        float percentWomen = (float) casesWomen / totalCases * 100;
-
-
-        // PieChart introduction found here:
-        // https://docs.oracle.com/javafx/2/charts/pie-chart.htm
-        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
-        pieChartData.add(new PieChart.Data("Men", percentageMen));
-        pieChartData.add(new PieChart.Data("Women", percentWomen));
-
-        final Chart pieChart = new PieChart(pieChartData);
-        pieChart.setTitle(chartConfiguration.getTitle());
-        pieChart.setLegendVisible(false);
-        pieChart.setPrefWidth(dataView.getMainLayoutWidth());
-
-        return pieChart;
     }
 
 

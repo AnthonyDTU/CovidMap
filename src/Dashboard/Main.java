@@ -11,7 +11,7 @@ public class Main extends Application {
 
         // MVC Architecture tutorial, without fxml: https://stackoverflow.com/questions/36868391/using-javafx-controller-without-fxml
         // And then one more (the actual format) here: https://www.youtube.com/watch?v=dTVVa2gfht8&ab_channel=DerekBanas
-        DashboardModel model = new DashboardModel("C:\\Users\\Anton\\Desktop\\DTU\\IT Elektronik\\2. Semester\\Objekt Orienteret\\Semester Project\\Covid Data\\");
+        DashboardModel model = new DashboardModel();
         DashboardView view = new DashboardView();
         DashboardController controller = new DashboardController(model, view);
 

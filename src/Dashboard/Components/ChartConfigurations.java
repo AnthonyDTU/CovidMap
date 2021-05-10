@@ -8,8 +8,10 @@ public enum ChartConfigurations {
     Tested (1,"Tested","Daily Tested","Total Tested",4,2, new DataFile()),
     Admitted (2,"Admitted","Daily Admitted","Total Admitted",6,1, new DataFile()),
     Deaths (3,"Deaths","Daily Deaths","Total Deaths",0,1, new DataFile()),
-    ByAge (4,"Cases By Age", "N/A", "N/A", 0,1,new DataFile()),
-    BySex (5,"Cases By Sex", "N/A", "N/A", 0,1,new DataFile());
+    MunicipalityPositive(4,"Positive Cases","Daily Positive","Total Positive",-1,0, new DataFile()),
+    MunicipalityTested(5,"Tested","Daily Tested","Total Tested",-1,0, new DataFile()),
+    ByAge (6,"Cases By Age", "N/A", "N/A", 0,1,new DataFile()),
+    BySex (7,"Cases By Sex", "N/A", "N/A", 0,1,new DataFile());
 
     private int configurationIndex;
     private String title;
@@ -74,6 +76,12 @@ public enum ChartConfigurations {
         }
         else if (this == Tested){
             return data.getTestsOverTimeData();
+        }
+        else if (this == MunicipalityPositive){
+            return data.getMunicipalityPositiveOverTime();
+        }
+        else if (this == MunicipalityTested){
+            return data.getMunicipalityTestedOverTime();
         }
         else if (this == Admitted){
             return data.getNewlyAdmittedOverTimeData();
