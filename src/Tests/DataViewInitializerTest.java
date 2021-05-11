@@ -37,8 +37,12 @@ class DataViewInitializerTest {
                     "Hovedstaden"
             );
 
-    @BeforeAll
-    static void loadFiles(){
+
+    @Test
+    void initializeDataView() {
+
+        JFXPanel jfxPanel = new JFXPanel();
+
         DashboardModel model = new DashboardModel();
         model.setTestsOverTimeData(new DataFile().LoadFile(testsOverTimeFilename));
         model.setTestsByRegionsOverTimeData(new DataFile().LoadFile(testsByRegionOverTimeFilename));
@@ -46,14 +50,8 @@ class DataViewInitializerTest {
         model.setNewlyAdmittedOverTimeData(new DataFile().LoadFile(newlyAdmittedOverTimeFilename));
         model.setCasesByAgeData(new DataFile().LoadFile(casesByAgeFilename));
         model.setCasesBySexData(new DataFile().LoadFile(casesBySexFilename));
-    }
 
-
-    @Test
-    void initializeDataView() {
-
-        JFXPanel jfxPanel = new JFXPanel();
-        DataView dataView = new DataView().InitializeDataView();
+        DataView dataView = new DataView().InitializeDataView(model);
         assertEquals(6, dataView.getCharts().size());
         assertEquals(6, dataView.getChartsKeys().size());
         assertEquals(timePeriodOptions, dataView.getTimePeriodComboBox().getItems());

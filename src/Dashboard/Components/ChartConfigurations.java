@@ -75,9 +75,8 @@ public enum ChartConfigurations {
     public void resetCumulativeValue(){ cumulativeValue = 0; }
 
     // Get the dataFile needed for the specific chart configuration
-    public DataFile getDataFile(){
+    public DataFile getDataFile(DashboardModel data){
 
-        DashboardModel data = new DashboardModel();
         if (this == Positive){
             return data.getTestsOverTimeData();
         }

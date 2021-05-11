@@ -11,15 +11,15 @@ public class DashboardModel {
 
     private boolean allFilesLoadedCorrectly = false;
 
-    private static DataFile testsOverTime = new DataFile();
-    private static DataFile testsByRegionsOverTime = new DataFile();
-    private static DataFile deathsOverTime = new DataFile();
-    private static DataFile newlyAdmittedOverTime = new DataFile();
-    private static DataFile regionSummary = new DataFile();
-    private static DataFile casesByAge = new DataFile();
-    private static DataFile casesBySex = new DataFile();
-    private static DataFile municipalityTestedOverTime = new DataFile();
-    private static DataFile municipalityPositiveOverTime = new DataFile();
+    private DataFile testsOverTime = new DataFile();
+    private DataFile testsByRegionsOverTime = new DataFile();
+    private DataFile deathsOverTime = new DataFile();
+    private DataFile newlyAdmittedOverTime = new DataFile();
+    private DataFile regionSummary = new DataFile();
+    private DataFile casesByAge = new DataFile();
+    private DataFile casesBySex = new DataFile();
+    private DataFile municipalityTestedOverTime = new DataFile();
+    private DataFile municipalityPositiveOverTime = new DataFile();
 
 
     public DashboardModel(){

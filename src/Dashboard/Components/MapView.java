@@ -1,6 +1,7 @@
 package Dashboard.Components;
 
 import Dashboard.ComponentIntializers.MapViewInitializer;
+import Dashboard.DashboardModel;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -42,9 +43,9 @@ public class MapView {
 
     // This function needs to be called in order to initializer the MapView for my application
     //
-    public MapView InitializeMapView(){
+    public MapView InitializeMapView(DashboardModel data){
         MapViewInitializer initializer = new MapViewInitializer();
-        return initializer.InitializeMapView(this);
+        return initializer.InitializeMapView(data, this);
     }
 
     // ***********************************************************************************************************

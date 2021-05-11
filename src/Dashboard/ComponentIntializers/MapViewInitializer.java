@@ -30,9 +30,8 @@ public class MapViewInitializer {
 
     // Receives an empty MapView, and return an initialized one.
     //
-    public MapView InitializeMapView(MapView mapView) {
+    public MapView InitializeMapView(DashboardModel data, MapView mapView) {
 
-        DashboardModel data = new DashboardModel();
         DataFile regionSummary = data.getRegionSummary();
 
         mapView.setKPIHeaderLabel(createKPIHeaderLabel(regionSummary));

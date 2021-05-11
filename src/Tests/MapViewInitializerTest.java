@@ -15,15 +15,18 @@ class MapViewInitializerTest {
 
     @BeforeAll
     static void loadFiles(){
-        DashboardModel model = new DashboardModel();
-        model.setTestsOverTimeData(new DataFile().LoadFile(regionSummaryFilename));
+
     }
 
     @Test
     void initializeMapView() {
 
         JFXPanel jfxPanel = new JFXPanel();
-        MapView mapView = new MapView().InitializeMapView();
+
+        DashboardModel model = new DashboardModel();
+        model.setTestsOverTimeData(new DataFile().LoadFile(regionSummaryFilename));
+
+        MapView mapView = new MapView().InitializeMapView(model);
         assertEquals(5, mapView.getRegionButtons().size());
         assertEquals(5, mapView.getRegionButtonKeys().size());
         assertEquals(4, mapView.getKPIFields().size());

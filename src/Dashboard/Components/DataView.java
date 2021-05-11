@@ -1,6 +1,7 @@
 package Dashboard.Components;
 
 import Dashboard.ComponentIntializers.DataViewInitializer;
+import Dashboard.DashboardModel;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.chart.Chart;
@@ -39,9 +40,9 @@ public class DataView {
 
     // This function needs to be called in order to initializer the DataView for my application
     //
-    public DataView InitializeDataView(){
+    public DataView InitializeDataView(DashboardModel data){
         DataViewInitializer initializer = new DataViewInitializer();
-        return initializer.InitializeDataView(this);
+        return initializer.InitializeDataView(data,this);
     }
 
     // ***********************************************************************************************************

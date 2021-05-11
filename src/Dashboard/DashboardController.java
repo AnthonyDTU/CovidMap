@@ -46,12 +46,12 @@ public class DashboardController {
             // Intialize the View
             //
             // Map View:
-            this.view.setMapView(new MapView().InitializeMapView());
+            this.view.setMapView(new MapView().InitializeMapView(model));
             this.view.getMapView().addEventHandlerToRegionButtons(new RegionButtonEventHandler());
             this.view.getMapView().addEventHandlerToImageVIew(new ImageViewEventHandler());
             //
             // Data View:
-            this.view.setDataView(new DataView().InitializeDataView());
+            this.view.setDataView(new DataView().InitializeDataView(model));
             this.view.getDataView().addEventHandlerToComboBox(new FilterComboBoxesEventHandler());
             //
             this.view.createRoot(view.getDataView(), view.getMapView());
@@ -130,13 +130,13 @@ public class DashboardController {
 
                 // Figure out the time period filter, and set control variable accordingly
                 int startIndex = switch (view.getDataView().getTimePeriodSelected()) {
-                    case "30 Dage" -> chartConfiguration.getDataFile().getLineKeys().size() - 30 - chartConfiguration.getNumberOfTotalLines();
-                    case "7 Dage" -> chartConfiguration.getDataFile().getLineKeys().size() - 7 - chartConfiguration.getNumberOfTotalLines();
+                    case "30 Dage" -> chartConfiguration.getDataFile(model).getLineKeys().size() - 30 - chartConfiguration.getNumberOfTotalLines();
+                    case "7 Dage" -> chartConfiguration.getDataFile(model).getLineKeys().size() - 7 - chartConfiguration.getNumberOfTotalLines();
                     default -> 0;
                 };
 
                 // Create the new charts
-                Chart dataChart = new DataChart().createUpdatedTimeChart(chartConfiguration, municipality, startIndex);
+                Chart dataChart = new DataChart().createUpdatedTimeChart(model, chartConfiguration, municipality, startIndex);
                 view.getDataView().getCharts().put(chartConfiguration, dataChart);
                 newChartsArea.getChildren().add(dataChart);
             }

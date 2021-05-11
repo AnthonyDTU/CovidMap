@@ -38,12 +38,12 @@ public class DataViewInitializer {
 
     // Receives an empty DataView, and return an initialized one.
     //
-    public DataView InitializeDataView(DataView dataView)
+    public DataView InitializeDataView(DashboardModel data, DataView dataView)
     {
         dataView.setChartsKeys(createChartKeys());
-        dataView.setCharts(createCharts(dataView));
+        dataView.setCharts(createCharts(data, dataView));
         dataView.setTimePeriodComboBox(createTimePeriodComboBox(dataView));
-        dataView.setMunicipalityComboBox(createMunicipalityComboBox(dataView));
+        dataView.setMunicipalityComboBox(createMunicipalityComboBox(data, dataView));
         dataView.setHeaderBar(createHeaderBar(dataView));
         dataView.setChartsArea(createChartsArea(dataView));
         dataView.setMainLayout(createMainLayout(dataView));
@@ -67,7 +67,7 @@ public class DataViewInitializer {
 
     // Creates and configures all the charts contained in the DataView
     //
-    private HashMap<ChartConfigurations, Chart> createCharts(DataView dataView)
+    private HashMap<ChartConfigurations, Chart> createCharts(DashboardModel data, DataView dataView)
     {
         HashMap<ChartConfigurations, Chart> charts = new HashMap<>();
 
@@ -76,13 +76,13 @@ public class DataViewInitializer {
             Chart chart;
 
             if (chartConfiguration == ChartConfigurations.ByAge){
-                chart = new DataChart().initializeCasesByAgePieChart(chartConfiguration);
+                chart = new DataChart().initializeCasesByAgePieChart(data, chartConfiguration);
             }
             else if (chartConfiguration == ChartConfigurations.BySex){
-                chart = new DataChart().initializeCasesBySexPieChart(chartConfiguration);
+                chart = new DataChart().initializeCasesBySexPieChart(data, chartConfiguration);
             }
             else {
-                chart = new DataChart().initializeTimeChart(chartConfiguration);
+                chart = new DataChart().initializeTimeChart(data, chartConfiguration);
             }
 
             charts.put(chartConfiguration, chart);
@@ -100,9 +100,8 @@ public class DataViewInitializer {
 
     // Creates the municipality filter ComboBox
     //
-    private ComboBox<String> createMunicipalityComboBox(DataView dataView)
+    private ComboBox<String> createMunicipalityComboBox(DashboardModel data, DataView dataView)
     {
-        DashboardModel data = new DashboardModel();
         DataFile municipalityData = data.getMunicipalityPositiveOverTime();
 
         municipalityOptions.clear();

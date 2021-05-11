@@ -24,7 +24,7 @@ public class DataChart {
 
     // Initializes a new time chart. This is used from DataView initializer
     //
-    public Chart initializeTimeChart(ChartConfigurations chartConfiguration){
+    public Chart initializeTimeChart(DashboardModel data, ChartConfigurations chartConfiguration){
 
         // Create the data series
         TypedSeries<String,Number> cumulativeSeries = TypedSeries.<String,Number>
@@ -41,7 +41,7 @@ public class DataChart {
 
 
         // Get the nesessary DateFile
-        DataFile dataFile = chartConfiguration.getDataFile();
+        DataFile dataFile = chartConfiguration.getDataFile(data);
 
         // Configure the data series
         for (int i = 0; i < dataFile.getLineKeys().size() - chartConfiguration.getNumberOfTotalLines(); i++){ // Dont read last line
@@ -70,9 +70,9 @@ public class DataChart {
     }
 
     // Initializes the Cases By Age chart. This is called from DataViewInitializer
-    public Chart initializeCasesByAgePieChart(ChartConfigurations chartConfiguration){
+    public Chart initializeCasesByAgePieChart(DashboardModel data, ChartConfigurations chartConfiguration){
 
-        DataFile casesByAge = chartConfiguration.getDataFile();
+        DataFile casesByAge = chartConfiguration.getDataFile(data);
 
         // PieChart introduction found here:
         // https://docs.oracle.com/javafx/2/charts/pie-chart.htm
@@ -94,10 +94,10 @@ public class DataChart {
         return pieChart;
     }
 
-    public Chart initializeCasesBySexPieChart(ChartConfigurations chartConfiguration){
+    public Chart initializeCasesBySexPieChart(DashboardModel data, ChartConfigurations chartConfiguration){
 
         // Get the nessesary DataFile
-        DataFile casesBySexData = chartConfiguration.getDataFile();
+        DataFile casesBySexData = chartConfiguration.getDataFile(data);
 
         // Calculate the percentage value
         int indexOfLast = casesBySexData.getLineKeys().size() - 1;
@@ -124,7 +124,7 @@ public class DataChart {
         return pieChart;
     }
 
-    public Chart createUpdatedTimeChart(ChartConfigurations chartConfiguration, String municipality, int startIndex){
+    public Chart createUpdatedTimeChart(DashboardModel data, ChartConfigurations chartConfiguration, String municipality, int startIndex){
 
         // Create the data sereies
         TypedSeries<String,Number> cumulativeSeries = TypedSeries.<String,Number>
@@ -141,7 +141,7 @@ public class DataChart {
 
 
         // Get the nesessary DateFile
-        DataFile dataFile = chartConfiguration.getDataFile();
+        DataFile dataFile = chartConfiguration.getDataFile(data);
 
 
         // Fingure out what the dataKey should be, based on the the filter selection
