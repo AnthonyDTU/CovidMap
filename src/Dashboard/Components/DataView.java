@@ -14,13 +14,13 @@ import java.util.HashMap;
 import java.util.List;
 
 public class DataView {
-    VBox mainLayout;
-    HBox headerBar;
-    ComboBox timePeriodComboBox;
-    ComboBox municipalityComboBox;
-    VBox chartsArea;
-    List<ChartConfigurations> chartsKeys;
-    HashMap<ChartConfigurations, Chart> charts;
+    private VBox mainLayout;
+    private HBox headerBar;
+    private ComboBox timePeriodComboBox;
+    private ComboBox municipalityComboBox;
+    private VBox chartsArea;
+    private List<ChartConfigurations> chartsKeys;
+    private HashMap<ChartConfigurations, Chart> charts;
 
     private final int mainLayoutWidth = 700;
     private final int headerBarHeight = 150;
@@ -34,13 +34,19 @@ public class DataView {
         this.municipalityComboBox = new ComboBox();
         this.chartsArea = new VBox();
         this.chartsKeys = new ArrayList<>();
-        this.charts = new HashMap<ChartConfigurations, Chart>();
+        this.charts = new HashMap<>();
     }
 
+    // This function needs to be called in order to initializer the DataView for my application
+    //
     public DataView InitializeDataView(){
         DataViewInitializer initializer = new DataViewInitializer();
         return initializer.InitializeDataView(this);
     }
+
+    // ***********************************************************************************************************
+    // Getters and setters
+    // ***********************************************************************************************************
 
     public int getMainLayoutWidth() { return mainLayoutWidth; }
     public int getHeaderBarHeight() { return headerBarHeight; }
@@ -79,11 +85,15 @@ public class DataView {
     }
     public void setCharts(HashMap<ChartConfigurations, Chart> charts) { this.charts = charts; }
 
+    // Adds event handlers to the filter comboBoxes
+    //
     public void addEventHandlerToComboBox(EventHandler<ActionEvent> eventHandler){
         timePeriodComboBox.setOnAction(eventHandler);
         municipalityComboBox.setOnAction(eventHandler);
     }
 
+    // Updates the charts with the newly filtered ones.
+    //
     public void reloadCharts(ScrollPane newChartArea){
         chartsArea.getChildren().clear();
         chartsArea.getChildren().add(newChartArea);

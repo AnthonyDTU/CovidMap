@@ -28,6 +28,8 @@ public class MapViewInitializer {
     }
 
 
+    // Receives an empty MapView, and return an initialized one.
+    //
     public MapView InitializeMapView(MapView mapView) {
 
         DashboardModel data = new DashboardModel();
@@ -47,6 +49,8 @@ public class MapViewInitializer {
     }
 
 
+    // Creates the label describing what the KPI values relates to
+    //
     private Label createKPIHeaderLabel(DataFile regionSummary){
 
         Label KPIHeaderLabel = new Label();
@@ -56,15 +60,16 @@ public class MapViewInitializer {
         return KPIHeaderLabel;
     }
 
+    // Creates the keys for the KPI Fields
+    //
     private List<String> createKPIFieldKeys(DataFile regionSummary){
 
-        List<String> KPIFieldKeys = new ArrayList<>();
-        for (String KPI : regionSummary.getDataFieldKeys()) {
-            KPIFieldKeys.add(KPI);
-        }
+        List<String> KPIFieldKeys = new ArrayList<>(regionSummary.getDataFieldKeys());
         return KPIFieldKeys;
     }
 
+    // Creates the KPI Fields needed
+    //
     private HashMap<String, KPIField> createKPIFields(DataFile regionSummary){
 
         HashMap<String, KPIField> KPIFields = new HashMap<>();
@@ -80,6 +85,8 @@ public class MapViewInitializer {
     }
 
 
+    // Creates the region button keys
+    //
     private List<String> createRegionButtonKeys(DataFile regionSummary){
 
         List<String> regionButtonKeys = new ArrayList<>();
@@ -92,6 +99,8 @@ public class MapViewInitializer {
     }
 
 
+    // Creates and configures the region buttons
+    //
     private HashMap<String, Button> createRegionButtons(DataFile regionSummary){
 
         HashMap<String, Button> regionButtons = new HashMap<>();
@@ -108,6 +117,8 @@ public class MapViewInitializer {
         return regionButtons;
     }
 
+    // Creates and configures the imageView
+    //
     private ImageView createMapImageView(MapView mapView, DataFile regionSummary){
 
         ImageView mapImageView = new ImageView();
@@ -127,6 +138,8 @@ public class MapViewInitializer {
         return mapImageView;
     }
 
+    // Composes the Map, with both imageView and buttons
+    //
     private Pane createMapPane(MapView mapView){
 
         Pane mapPane = new Pane();
@@ -140,6 +153,7 @@ public class MapViewInitializer {
         return mapPane;
     }
 
+    // Composes the header containing the KPI title and values
     private VBox createMapHeader(MapView mapView){
 
         GridPane KPIGrid = new GridPane();
@@ -149,7 +163,7 @@ public class MapViewInitializer {
 
         for (String KPI : mapView.getKPIFieldKeys())
         {
-            KPIGrid.getColumnConstraints().add(createNewColumn((int)(100 / mapView.getKPIFieldKeys().size())));
+            KPIGrid.getColumnConstraints().add(createNewColumn((100 / mapView.getKPIFieldKeys().size())));
             KPIGrid.getChildren().add(mapView.getKPIFields().get(KPI).getLayout());
         }
 
@@ -164,6 +178,8 @@ public class MapViewInitializer {
         return mapHeader;
     }
 
+    // Stiches everything together into a final layout
+    //
     private VBox createLayout(MapView mapView){
 
         VBox mainLayout = new VBox(10);
@@ -178,6 +194,8 @@ public class MapViewInitializer {
     // Helper Functions
     // **********************************************************************************************
 
+    // Creates the actual button used as region selector
+    //
     private Button createRegionButton(String ButtonID, int totalPositive, int regionPositive)
     {
         Button regionButton = new Button();

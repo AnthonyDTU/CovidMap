@@ -16,15 +16,15 @@ import java.util.List;
 
 public class MapView {
 
-    VBox mainLayout;
-    Pane mapPane;
-    VBox mapHeader;
-    ImageView imageView;
-    List<String> regionButtonKeys;
-    HashMap<String, Button> regionButtons;
-    Label KPIHeaderLabel;
-    List<String> KPIFieldKeys;
-    HashMap<String, KPIField> KPIFields;
+    private VBox mainLayout;
+    private Pane mapPane;
+    private VBox mapHeader;
+    private ImageView imageView;
+    private List<String> regionButtonKeys;
+    private HashMap<String, Button> regionButtons;
+    private Label KPIHeaderLabel;
+    private List<String> KPIFieldKeys;
+    private HashMap<String, KPIField> KPIFields;
 
     private final int mainLayoutWidth = 800;
     private final int headerHeight = 100;
@@ -34,16 +34,22 @@ public class MapView {
         this.mapHeader = new VBox();
         this.imageView = new ImageView();
         this.regionButtonKeys = new ArrayList<>();
-        this.regionButtons = new HashMap<String, Button>();
+        this.regionButtons = new HashMap<>();
         this.KPIHeaderLabel = new Label();
         this.KPIFieldKeys = new ArrayList<>();
-        this.KPIFields = new HashMap<String, KPIField>();
+        this.KPIFields = new HashMap<>();
     }
 
+    // This function needs to be called in order to initializer the MapView for my application
+    //
     public MapView InitializeMapView(){
         MapViewInitializer initializer = new MapViewInitializer();
         return initializer.InitializeMapView(this);
     }
+
+    // ***********************************************************************************************************
+    // Getters and setters
+    // ***********************************************************************************************************
 
     public int getMainLayoutWidth() { return mainLayoutWidth; }
     public int getHeaderHeight() { return headerHeight; }
@@ -96,6 +102,8 @@ public class MapView {
     // Add Event Handlers
     // *****************************************************************************************************************
 
+    // Adds event handlers to the region selection buttons
+    //
     public void addEventHandlerToRegionButtons(EventHandler<ActionEvent> eventHandler)
     {
         for (String buttonKey : regionButtonKeys) {
@@ -103,6 +111,8 @@ public class MapView {
         }
     }
 
+    // Adds event handlers to the map imageView
+    //
     public void addEventHandlerToImageVIew(EventHandler<MouseEvent> event)
     {
         imageView.setOnMouseClicked(event);

@@ -57,6 +57,7 @@ public class DashboardController {
             this.view.createRoot(view.getDataView(), view.getMapView());
         }
         else {
+            // Inform the user of the error
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("File not loaded");
             alert.setContentText("One or more files could not be found, or were not loaded correctly");
@@ -64,6 +65,8 @@ public class DashboardController {
         }
     }
 
+    // Handles the event handler connected to the region buttons
+    //
     class RegionButtonEventHandler implements EventHandler<ActionEvent> {
 
         @Override
@@ -74,6 +77,8 @@ public class DashboardController {
         }
     }
 
+    // Handles the event handler connected to the map imageView
+    //
     class ImageViewEventHandler implements EventHandler<MouseEvent>{
 
         @Override
@@ -84,6 +89,7 @@ public class DashboardController {
         }
     }
 
+    // Updates the KPIFields with new values
     private void UpdateRegionKPIFields(String senderID)
     {
         DataFile regionSummary = model.getRegionSummary();
@@ -96,7 +102,8 @@ public class DashboardController {
         }
     }
 
-
+    // Handles the event handler connected to the filter ComboBoxes
+    //
     class FilterComboBoxesEventHandler implements EventHandler<ActionEvent>{
 
         @Override
@@ -111,47 +118,43 @@ public class DashboardController {
 
                 String municipality = view.getDataView().getMunicipalitySelected();
 
-                if (chartConfiguration == ChartConfigurations.Positive && municipality != "Danmark"){
+                // Figure out the municipality filter, and update the chart configurations accordingly
+                if (chartConfiguration == ChartConfigurations.Positive && !municipality.equals("Danmark")){
                     chartConfiguration = ChartConfigurations.MunicipalityPositive;
                     chartConfiguration.resetCumulativeValue();
                 }
-                else if (chartConfiguration == ChartConfigurations.Tested && municipality != "Danmark"){
+                else if (chartConfiguration == ChartConfigurations.Tested && !municipality.equals("Danmark")){
                     chartConfiguration = ChartConfigurations.MunicipalityTested;
                     chartConfiguration.resetCumulativeValue();
                 }
 
-                int startIndex = 0;
-                switch (view.getDataView().getTimePeriodSelected())
-                {
-                    case "All Time":
+                // Figure out the time period filter, and set control variable accordingly
+                int startIndex = switch (view.getDataView().getTimePeriodSelected()) {
+                    case "30 Dage" -> chartConfiguration.getDataFile().getLineKeys().size() - 30 - chartConfiguration.getNumberOfTotalLines();
+                    case "7 Dage" -> chartConfiguration.getDataFile().getLineKeys().size() - 7 - chartConfiguration.getNumberOfTotalLines();
+                    default -> 0;
+                };
 
-                        break;
-
-                    case "30 Dage":
-                        startIndex = chartConfiguration.getDataFile().getLineKeys().size() - 30 - chartConfiguration.getNumberOfTotalLines();
-                        break;
-
-                    case "7 Dage":
-                        startIndex = chartConfiguration.getDataFile().getLineKeys().size() - 7 - chartConfiguration.getNumberOfTotalLines();
-                        break;
-                }
-
+                // Create the new charts
                 Chart dataChart = new DataChart().createUpdatedTimeChart(chartConfiguration, municipality, startIndex);
                 view.getDataView().getCharts().put(chartConfiguration, dataChart);
                 newChartsArea.getChildren().add(dataChart);
             }
 
+            // Get the piecharts
             HBox pieCharts = new HBox(0);
             pieCharts.getChildren().addAll(view.getDataView().getCharts().get(ChartConfigurations.ByAge), view.getDataView().getCharts().get(ChartConfigurations.BySex));
             pieCharts.setMaxWidth(700);
             newChartsArea.getChildren().add(pieCharts);
 
+            // Create the new charts collection in the form of a scrollView
             ScrollPane newChartsScrollPane = new ScrollPane();
             newChartsScrollPane.setStyle("-fx-background: white;");
             newChartsScrollPane.setPrefWidth(700);
             newChartsScrollPane.setPannable(true);
             newChartsScrollPane.setContent(newChartsArea);
 
+            // Get the DataView to update itself with the new view.
             view.getDataView().reloadCharts(newChartsScrollPane);
         }
     }

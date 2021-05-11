@@ -22,8 +22,11 @@ public class DataChart {
     public DataChart(){
     }
 
+    // Initializes a new time chart. This is used from DataView initializer
+    //
     public Chart initializeTimeChart(ChartConfigurations chartConfiguration){
 
+        // Create the data series
         TypedSeries<String,Number> cumulativeSeries = TypedSeries.<String,Number>
                 builder(chartConfiguration.getLegendTwoTitle()).area()
                 .withYAxisIndex(0)
@@ -37,8 +40,10 @@ public class DataChart {
                 .build();
 
 
+        // Get the nesessary DateFile
         DataFile dataFile = chartConfiguration.getDataFile();
 
+        // Configure the data series
         for (int i = 0; i < dataFile.getLineKeys().size() - chartConfiguration.getNumberOfTotalLines(); i++){ // Dont read last line
 
             String lineKey = dataFile.getLineKeys().get(i);
@@ -48,13 +53,15 @@ public class DataChart {
             cumulativeSeries.addData(lineKey, chartConfiguration.getCumulativeValue());
         }
 
+        // Create the chart
         MultiTypeChart<String, Number> multiTypeChart= new MultiTypeChart<>(new CategoryAxis(), new NumberAxis());
 
-        multiTypeChart.setTitle(chartConfiguration.getTitle() + " - Danmark");
-        multiTypeChart.setId(String.valueOf(chartConfiguration.getConfigurationIndex()));
-
+        // Add date series to the chart
         multiTypeChart.addSeries(cumulativeSeries);
         multiTypeChart.addSeries(dailySeries);
+
+        // Configure the chart
+        multiTypeChart.setTitle(chartConfiguration.getTitle() + " - Danmark");
 
         multiTypeChart.setSeriesColor(1, 90);
         multiTypeChart.setSeriesColor(2, 50);
@@ -62,15 +69,16 @@ public class DataChart {
         return multiTypeChart;
     }
 
+    // Initializes the Cases By Age chart. This is called from DataViewInitializer
     public Chart initializeCasesByAgePieChart(ChartConfigurations chartConfiguration){
 
-        DashboardModel data = new DashboardModel();
-        DataFile casesByAge = data.getCasesByAgeData();
+        DataFile casesByAge = chartConfiguration.getDataFile();
 
         // PieChart introduction found here:
         // https://docs.oracle.com/javafx/2/charts/pie-chart.htm
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
 
+        // Configure the data series
         for (int i = 0; i < casesByAge.getLineKeys().size() - 1; i++){ // Dont read last line
 
             String lineKey = casesByAge.getLineKeys().get(i);
@@ -79,6 +87,7 @@ public class DataChart {
             pieChartData.add(new PieChart.Data(lineKey, casesByAge.getData().get(lineKey).get(dataKey)));
         }
 
+        // Create the chart
         final Chart pieChart = new PieChart(pieChartData);
         pieChart.setTitle(chartConfiguration.getTitle() + " - Danmark");
         pieChart.setLegendVisible(false);
@@ -87,8 +96,10 @@ public class DataChart {
 
     public Chart initializeCasesBySexPieChart(ChartConfigurations chartConfiguration){
 
+        // Get the nessesary DataFile
         DataFile casesBySexData = chartConfiguration.getDataFile();
 
+        // Calculate the percentage value
         int indexOfLast = casesBySexData.getLineKeys().size() - 1;
         String keyOfLast = casesBySexData.getLineKeys().get(indexOfLast);
 
@@ -106,6 +117,7 @@ public class DataChart {
         pieChartData.add(new PieChart.Data("Men", percentageMen));
         pieChartData.add(new PieChart.Data("Women", percentWomen));
 
+        // Create the final chart
         final Chart pieChart = new PieChart(pieChartData);
         pieChart.setTitle(chartConfiguration.getTitle() + " - Danmark");
         pieChart.setLegendVisible(false);
@@ -114,6 +126,7 @@ public class DataChart {
 
     public Chart createUpdatedTimeChart(ChartConfigurations chartConfiguration, String municipality, int startIndex){
 
+        // Create the data sereies
         TypedSeries<String,Number> cumulativeSeries = TypedSeries.<String,Number>
                 builder(chartConfiguration.getLegendTwoTitle()).area()
                 .withYAxisIndex(0)
@@ -127,16 +140,20 @@ public class DataChart {
                 .build();
 
 
+        // Get the nesessary DateFile
         DataFile dataFile = chartConfiguration.getDataFile();
 
-        String dataKey = "";
-        if ((chartConfiguration == ChartConfigurations.MunicipalityPositive || chartConfiguration == ChartConfigurations.MunicipalityTested) && municipality != "Danmark"){
+
+        // Fingure out what the dataKey should be, based on the the filter selection
+        String dataKey;
+        if ((chartConfiguration == ChartConfigurations.MunicipalityPositive || chartConfiguration == ChartConfigurations.MunicipalityTested) && !municipality.equals("Danmark")){
             dataKey = municipality;
         }
         else {
             dataKey = dataFile.getDataFieldKeys().get(chartConfiguration.getIndexOfData());
         }
 
+        // Configure the data series
         for (int i = startIndex; i < dataFile.getLineKeys().size() - chartConfiguration.getNumberOfTotalLines(); i++){ // Dont read last line
 
             String lineKey = dataFile.getLineKeys().get(i);
@@ -146,19 +163,20 @@ public class DataChart {
             cumulativeSeries.addData(lineKey, chartConfiguration.getCumulativeValue());
         }
 
+        // Create the chart
         MultiTypeChart<String, Number> multiTypeChart= new MultiTypeChart<>(new CategoryAxis(), new NumberAxis());
 
+        // Add the data series
+        multiTypeChart.addSeries(cumulativeSeries);
+        multiTypeChart.addSeries(dailySeries);
+
+        // Configure the chart
         if (chartConfiguration == ChartConfigurations.MunicipalityPositive || chartConfiguration == ChartConfigurations.MunicipalityTested){
             multiTypeChart.setTitle(chartConfiguration.getTitle() + " - " + municipality);
         }
         else {
             multiTypeChart.setTitle(chartConfiguration.getTitle() + " - Danmark");
         }
-
-        multiTypeChart.setId(String.valueOf(chartConfiguration.getConfigurationIndex()));
-
-        multiTypeChart.addSeries(cumulativeSeries);
-        multiTypeChart.addSeries(dailySeries);
 
         multiTypeChart.setSeriesColor(1, 90);
         multiTypeChart.setSeriesColor(2, 50);

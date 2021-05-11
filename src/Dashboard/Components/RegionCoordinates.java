@@ -10,6 +10,8 @@ public enum RegionCoordinates {
     private int xCoordinate;
     private int yCoordinate;
 
+    // Contains coordinates for where to place the different buttons on the map
+    //
     RegionCoordinates(int xCoordinate, int yCoordinate) {
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;

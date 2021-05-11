@@ -15,6 +15,7 @@ public class DashboardView {
     public DashboardView(){
     }
 
+    // Get and Set the MapView
     public void setMapView(MapView mapView){
         this.mapView = mapView;
     }
@@ -22,6 +23,7 @@ public class DashboardView {
         return mapView;
     }
 
+    // Get and set the DataView
     public void setDataView(DataView dataView){
         this.dataView = dataView;
     }
@@ -29,6 +31,7 @@ public class DashboardView {
         return dataView;
     }
 
+    // Combine the MapView and the DataView into a collective view
     public void createRoot(DataView dataView, MapView mapView)
     {
         ColumnConstraints column1 = new ColumnConstraints();
@@ -49,6 +52,7 @@ public class DashboardView {
         root.setStyle("-fx-background-color: white;");
     }
 
+    // Get to complete layout for the scene to present
     public Parent asParent() {
         return root;
     }

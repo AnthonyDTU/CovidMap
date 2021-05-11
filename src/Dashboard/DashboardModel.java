@@ -25,6 +25,11 @@ public class DashboardModel {
     public DashboardModel(){
     }
 
+    // ***********************************************************************************************************
+    // Getters and setters
+    // ***********************************************************************************************************
+
+
     public final void setTestsOverTimeData(DataFile testsOverTime) { this.testsOverTime = testsOverTime; }
     public DataFile getTestsOverTimeData() { return testsOverTime; }
 
@@ -58,21 +63,17 @@ public class DashboardModel {
     public void setMunicipalityPositiveOverTime(DataFile municipalityPositiveOverTime) { this.municipalityPositiveOverTime = municipalityPositiveOverTime; }
     public DataFile getMunicipalityPositiveOverTime() { return municipalityPositiveOverTime; }
 
+    // Checking function to determine if any of the files was not found
+    //
     public boolean checkAllFilesLoaded(){
-        if (testsOverTime != null &&
-            testsByRegionsOverTime != null &&
-            deathsOverTime != null &&
-            newlyAdmittedOverTime != null &&
-            regionSummary != null &&
-            casesByAge != null &&
-            casesBySex != null &&
-            municipalityTestedOverTime != null &&
-            municipalityPositiveOverTime != null)
-        {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return testsOverTime != null &&
+                testsByRegionsOverTime != null &&
+                deathsOverTime != null &&
+                newlyAdmittedOverTime != null &&
+                regionSummary != null &&
+                casesByAge != null &&
+                casesBySex != null &&
+                municipalityTestedOverTime != null &&
+                municipalityPositiveOverTime != null;
     }
 }

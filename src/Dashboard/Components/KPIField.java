@@ -13,6 +13,8 @@ public class KPIField {
     private Label titleLabel;
     private Label valueLabel;
 
+    // Creates and configures the nessesary components
+    //
     public KPIField(String title, String value)
     {
         titleLabel = new Label(title);
@@ -28,11 +30,14 @@ public class KPIField {
 
     }
 
+    // Get and set the text displayed by the value label
     public void setValueLabelText(String value){
         valueLabel.setText(value);
     }
     public String getValueLabelText() { return valueLabel.getText(); }
 
+    // Gets the layout of the KPIField
+    //
     public VBox getLayout(){
         return layout;
     }

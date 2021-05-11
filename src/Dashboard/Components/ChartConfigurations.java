@@ -29,43 +29,52 @@ public enum ChartConfigurations {
         this.indexOfData = indexOfData;
         this.numberOfTotalLines = numberOfTotalLines;
         this.cumulativeValue = 0;
-
     }
 
+    // Identifier for the specific configuration
     public int getConfigurationIndex(){
         return configurationIndex;
     }
 
+    // Title of the chart, which is displayed to the user
     public String getTitle(){
         return title;
     }
 
+    // Title of the first data series
     public String getLegendOneTitle(){
         return legendOneTitle;
     }
 
+    // Title of the second data series
     public String getLegendTwoTitle(){
         return legendTwoTitle;
     }
 
+    // Index of the data field the specific chart configuration needs to read from in the file
     public int getIndexOfData(){
         return indexOfData;
     }
 
+    // Specifies how many lines (total lines) the chart should exclude from the bottom of the file.
     public int getNumberOfTotalLines(){
         return numberOfTotalLines;
     }
 
+    // Keep a running cumulative value for when initializing the chart.
     public void addToCumulativeValue(int value){
         cumulativeValue += value;
     }
 
+    // Read the cumulative value
     public int getCumulativeValue(){
         return cumulativeValue;
     }
 
+    // Reset the cumulative value
     public void resetCumulativeValue(){ cumulativeValue = 0; }
 
+    // Get the dataFile needed for the specific chart configuration
     public DataFile getDataFile(){
 
         DashboardModel data = new DashboardModel();

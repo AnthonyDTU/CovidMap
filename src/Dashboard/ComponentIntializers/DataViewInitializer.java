@@ -36,6 +36,8 @@ public class DataViewInitializer {
     }
 
 
+    // Receives an empty DataView, and return an initialized one.
+    //
     public DataView InitializeDataView(DataView dataView)
     {
         dataView.setChartsKeys(createChartKeys());
@@ -49,6 +51,8 @@ public class DataViewInitializer {
         return dataView;
     }
 
+    // Creates keys for all the charts, for later access
+    //
     private List<ChartConfigurations> createChartKeys()
     {
         List<ChartConfigurations> chartConfigurationKeys = new ArrayList<>();
@@ -61,6 +65,8 @@ public class DataViewInitializer {
         return chartConfigurationKeys;
     }
 
+    // Creates and configures all the charts contained in the DataView
+    //
     private HashMap<ChartConfigurations, Chart> createCharts(DataView dataView)
     {
         HashMap<ChartConfigurations, Chart> charts = new HashMap<>();
@@ -85,12 +91,16 @@ public class DataViewInitializer {
         return charts;
     }
 
-    private ComboBox createTimePeriodComboBox(DataView dataView)
+    // Creates the time filter ComboBox
+    //
+    private ComboBox<String> createTimePeriodComboBox(DataView dataView)
     {
         return createFilterComboBox(dataView,0, timePeriodOptions);
     }
 
-    private ComboBox createMunicipalityComboBox(DataView dataView)
+    // Creates the municipality filter ComboBox
+    //
+    private ComboBox<String> createMunicipalityComboBox(DataView dataView)
     {
         DashboardModel data = new DashboardModel();
         DataFile municipalityData = data.getMunicipalityPositiveOverTime();
@@ -102,6 +112,8 @@ public class DataViewInitializer {
         return createFilterComboBox(dataView,1, municipalityOptions);
     }
 
+    // Add the components of the headerBar to a HBox
+    //
     private HBox createHeaderBar(DataView dataView)
     {
         GridPane grid = new GridPane();
@@ -119,6 +131,8 @@ public class DataViewInitializer {
         return headerBar;
     }
 
+    // Creates the area where the charts are to be located
+    //
     private VBox createChartsArea(DataView dataView)
     {
         HBox pieCharts = new HBox(0);
@@ -149,6 +163,8 @@ public class DataViewInitializer {
         return chartsArea;
     }
 
+    // Stiches everything together into a final layout
+    //
     private VBox createMainLayout(DataView dataView)
     {
         VBox mainLayout = new VBox(10);
@@ -161,9 +177,11 @@ public class DataViewInitializer {
     // Helper Functions
     // **********************************************************************************************
 
-    private ComboBox createFilterComboBox(DataView dataView, int gridspot, ObservableList<String> data){
+    // Creates both the filter comboBoxes, according to the specifications provided in the parameters
+    //
+    private ComboBox<String> createFilterComboBox(DataView dataView, int gridspot, ObservableList<String> data){
 
-        ComboBox comboBox = new ComboBox();
+        ComboBox<String> comboBox = new ComboBox<>();
         comboBox.setItems(data);
         comboBox.setValue(data.get(0));
         comboBox.setPrefWidth(dataView.getComboBoxWidth());
@@ -175,6 +193,8 @@ public class DataViewInitializer {
         return comboBox;
     }
 
+    // Creates a label describing the filter ComboBox function
+    //
     private Label createFilterLabel(int gridspot, String text){
         Label regionLabel = new Label(text);
         regionLabel.setFont(Font.font("Arial", 15));
