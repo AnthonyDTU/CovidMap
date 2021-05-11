@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/CovidMap.iml" filepath="$PROJECT_DIR$/CovidMap.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CovidMap - s191270.iml" filepath="$PROJECT_DIR$/CovidMap - s191270.iml" />
       <module fileurl="file://$PROJECT_DIR$/../JavaFXMultiChart-master/MultiTypeChart.iml" filepath="$PROJECT_DIR$/../JavaFXMultiChart-master/MultiTypeChart.iml" />
     </modules>
   </component>
