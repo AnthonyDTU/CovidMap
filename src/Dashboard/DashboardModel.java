@@ -1,15 +1,8 @@
 package Dashboard;
 
-
 import Dashboard.Components.DataFile;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class DashboardModel {
-
-
-    private boolean allFilesLoadedCorrectly = false;
 
     private DataFile testsOverTime = new DataFile();
     private DataFile testsByRegionsOverTime = new DataFile();
